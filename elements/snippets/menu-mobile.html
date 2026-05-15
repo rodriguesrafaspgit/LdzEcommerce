@@ -1,0 +1,248 @@
+<div id="menu-mobile" class="menu-mobile">
+
+    <div class="close-box close-overlay">
+        <i class="icon icon-times"></i>
+    </div>
+
+    <div class="block-title flex align-center">
+        <div class="header-menu">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        Menu
+    </div>
+
+    <div class="nav-mobile-wrapper">
+        <nav class="nav-mobile">
+            
+            <ul class="list first-level">
+
+                {% if settings.exibir_cabecalho_opcao_contato == '1' %}
+                    <li class="sub">
+                            
+                        <a>Contato</a>
+
+                        <ul class="second-level">
+                            <li>
+                                {% if settings.cabecalho_contato_telefone|length > 0 %}
+                                    {% set contato_numero_1 = settings.cabecalho_contato_telefone|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+                                    <p class="box-contato-mobile">
+                                        <strong>Telefone </strong>: <a href="tel:{{contato_numero_1}}"> {{ settings.cabecalho_contato_telefone }}</a> 
+                                    </p>
+                                {% endif %}
+
+                                {% if settings.cabecalho_contato_whatsapp_1|length > 0 or settings.cabecalho_contato_whatsapp_2|length > 0 %}
+                                    <p class="box-contato-mobile">
+                                        {% if settings.cabecalho_contato_whatsapp_1|length > 0 %}
+                                            {% set whatsapp_numero_1 = settings.cabecalho_contato_whatsapp_1|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+                                        
+                                            <strong>WhatsApp</strong>: <a  href="https://api.whatsapp.com/send?phone=55{{whatsapp_numero_1}}" rel="noreferrer" target="_blank">{{ settings.cabecalho_contato_whatsapp_1 }}</a> 
+                                        {% endif %}
+                                    </p>
+
+                                    <p class="box-contato-mobile">
+                                        {% if settings.cabecalho_contato_whatsapp_2|length > 0 %}
+                                            {% set whatsapp_numero_2 = settings.cabecalho_contato_whatsapp_2|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+
+                                            <strong>WhatsApp</strong>: <a  href="https://api.whatsapp.com/send?phone=55{{whatsapp_numero_2}}" rel="noreferrer" target="_blank">{{ settings.cabecalho_contato_whatsapp_2 }}</a> 
+
+                                        {% endif %}
+                                    </p>
+                                {% endif %}
+
+                                {% if settings.cabecalho_contato_email|length > 0 %}
+                                    <p class="box-contato-mobile">
+                                         <strong>E-mail</strong>: <a href="mailto:{{ settings.cabecalho_contato_email }}">{{ settings.cabecalho_contato_email }}</a>
+                                    </p>
+                                {% endif %}
+
+                                {% if settings.cabecalho_contato_horario_atendimento|length > 0 %}
+                                    <p>
+                                        <strong>Horário de Atendimento</strong> <br />
+                                        {{ settings.cabecalho_contato_horario_atendimento }}
+                                    </p>
+                                {% endif %}
+
+                                <p>
+                                    <a href="{{ links.contact }}">
+                                        <strong>Fale Conosco</strong>
+                                    </a>
+                                </p>
+                            </li>
+                        </ul>
+
+                    </li>
+                {% endif %}
+
+                {% if settings.exibir_cabecalho_opcao_promocoes == '1' %}
+                    <li class="sub">
+                            
+                        <a>Promoções</a>
+
+                        <ul class="second-level">
+                            <li>
+                                <p>
+                                    <a href="{{ links.search_offer }}">
+                                        Promoções
+                                    </a>
+                                </p>
+
+                                <p>
+                                    <a href="{{ links.search_featured }}">
+                                        Destaques
+                                    </a>
+                                </p>
+
+                                <p>
+                                    <a href="{{ links.search_new }}">
+                                        Novidades
+                                    </a>
+                                </p>
+                            </li>
+                        </ul>
+
+                    </li>
+                {% endif %}
+
+                {% if settings.exibir_cabecalho_opcao_promocoes == '1' %}
+                    <li style="margin: 10px 15px 10px 0px;"><hr/></li>
+                {% endif %}
+                
+            </ul>
+            
+            <ul class="list first-level">
+
+                {% if settings.pagina_extra_cabecalho_mobile %}
+
+                    {%
+                        if 
+                            (settings.pagina_extra_cabecalho_nome_1|length > 0 and settings.pagina_extra_cabecalho_link_1) or     
+                            (settings.pagina_extra_cabecalho_nome_2|length > 0 and settings.pagina_extra_cabecalho_link_2) or     
+                            (settings.pagina_extra_cabecalho_nome_3|length > 0 and settings.pagina_extra_cabecalho_link_3) or     
+                            (settings.pagina_extra_cabecalho_nome_4|length > 0 and settings.pagina_extra_cabecalho_link_4) or     
+                            (settings.pagina_extra_cabecalho_nome_5|length > 0 and settings.pagina_extra_cabecalho_link_5) 
+                    %}
+
+                        <ul class="list first-level">
+
+                            {% if settings.pagina_extra_cabecalho_nome_1|length > 0 and settings.pagina_extra_cabecalho_link_1 %}
+                            
+                                <li>
+                                    <a href="{{ settings.pagina_extra_cabecalho_link_1 }}"> {{ settings.pagina_extra_cabecalho_nome_1 }} </a>
+                                </li>
+
+                            {% endif %}
+                
+                            {% if settings.pagina_extra_cabecalho_nome_2|length > 0 and settings.pagina_extra_cabecalho_link_2 %}
+                                <li>
+                                    <a href="{{ settings.pagina_extra_cabecalho_link_2 }}"> {{ settings.pagina_extra_cabecalho_nome_2 }} </a>
+                                </li>
+                            {% endif %}
+                
+                            {% if settings.pagina_extra_cabecalho_nome_3|length > 0 and settings.pagina_extra_cabecalho_link_3 %}
+                                <li>
+                                    <a href="{{ settings.pagina_extra_cabecalho_link_3 }}"> {{ settings.pagina_extra_cabecalho_nome_3 }} </a>
+                                </li>
+                            {% endif %}
+                
+                            {% if settings.pagina_extra_cabecalho_nome_4|length > 0 and settings.pagina_extra_cabecalho_link_4 %}
+                                <li>
+                                    <a href="{{ settings.pagina_extra_cabecalho_link_4 }}"> {{ settings.pagina_extra_cabecalho_nome_4 }} </a>
+                                </li>
+                            {% endif %}
+                
+                            {% if settings.pagina_extra_cabecalho_nome_5|length > 0 and settings.pagina_extra_cabecalho_link_5 %}
+                                <li>
+                                    <a href="{{ settings.pagina_extra_cabecalho_link_5 }}"> {{ settings.pagina_extra_cabecalho_nome_5 }} </a>
+                                </li>
+                            {% endif %}
+
+                            <li style="margin: 10px 15px 10px 0px;"><hr/></li>
+
+                        </ul>
+
+                    {% endif %}
+
+                {% endif %}
+
+                {% if settings.pagina_extra_menu_mobile %}
+                    {% element 'snippets/menu-paginas-extras' {'posicao': 1} %}
+                {% endif %}
+
+                {% for category in categories %}
+                
+                    <li {% if category.children %} class="sub" {% endif %}>
+                        
+                        <a href="{{ category.link }}">{{ category.name }}</a>
+
+                        {% if category.children %}
+                        <ul class="second-level">
+                                
+                            <a href="{{ category.link }}">Ver {{ category.name }}</a>
+                            
+                            {% for level2 in category.children %}
+
+                                <li {% if level2.children %} class="sub" {% endif %}>
+                                    
+                                    <a href="{{ level2.link }}">{{ level2.name }}</a>
+                                
+                                    {% if level2.children %}
+                                    <ul class="third-level">
+                                        {% for level3 in level2.children %}
+                                        <li>
+                                            <a href="{{ level3.link }}">{{ level3.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}   
+
+                                </li>
+
+                            {% endfor %}    
+
+                        </ul>
+                        {% endif %}
+
+                    </li>
+
+                {% endfor %}
+
+                {% if settings.pagina_extra_menu_mobile %}
+                    {% element 'snippets/menu-paginas-extras' {'posicao': 2} %}
+                {% endif %}
+                    
+            </ul> 
+        </nav>
+    </div>
+
+    <div class="account flex align-center">
+
+        <!-- <i class="account-icon icon icon-login"></i> -->
+
+        <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: -4px; margin-right: 8px;" width="26" height="26" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+        </svg> 
+
+        <div class="tray-hide" data-logged-user="false">
+            <span>Minha Conta</span>
+            <div class="login-links">
+                <a href="{{ links.login }}" title="Entrar">Entrar</a>
+                <span>/</span>
+                <a href="{{ links.register }}" title="Cadastrar">Cadastrar</a>
+            </div>
+        </div> 
+
+        <div class="tray-hide" data-logged-user="true">
+            <span>Olá, <span data-customer="name"></span></span>
+            <div class="login-links">
+                <a href="{{ links.central }}" title="Minha Conta">Minha conta</a>
+                <span>/</span>
+                <a href="{{ links.logout }}" title="Sair">Sair</a>
+            </div>
+        </div>  
+
+    </div>
+
+</div>

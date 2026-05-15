@@ -1,0 +1,91 @@
+{% if type %}
+
+    {% if settings.ordenacao_id_vitrine %}
+    {% set ordenacao = { 'id': 'desc' } %}
+    {% else %}
+    {% set ordenacao = 'rand' %}
+    {% endif %}
+
+    {% set quantity = quantity | default(8) %}
+
+    {% if type == 'top_seller' %}
+
+        {% set products = Products({
+            'filter': 'available',
+            'order' : { 'quantity_sold': 'desc' },
+            'limit' : quantity
+        }) %}
+
+    {% else %}
+        {% if rand %}
+
+            {% set products = Products({
+                'filter': [type, 'available'],
+                'limit' : quantity,
+                'order' : ordenacao
+            }) %}
+
+        {% else %}
+
+            {% set products = Products({
+                'filter': [type, 'available'],
+                'limit' : quantity,
+                'order' : ordenacao
+            }) %}
+
+        {% endif %}
+    {% endif %}
+
+    {% if products | length > 0 %}
+        <div class="section-showcase">
+            <div class="container">
+
+                <div class="section-header">
+                    <h2 class="title-section">
+                        {% element 'snippets/title-showcase' { title: title, 'type': type } %}
+                    </h2>
+
+                    <div class="showcase-line"></div>
+
+                </div>
+
+                {% if ddesk and not utils.is_mobile or dmobile and utils.is_mobile %}
+
+                    <div id="{{ id }}" class="list-product swiper showcase-slide mb-0 {{ loop == 1 ? 'loop-infinito' : '' }}">
+
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                {% for item in products %}
+                                    <div class="swiper-slide item">
+                                        {% element 'snippets/product' {
+                                            product : item,
+                                            slide   : false
+                                        } %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                        
+                    </div>
+
+                {% else %}
+                    <div class="list-product flex f-wrap">
+                        {% for item in products %}
+                            <div class="item">
+                                {% element 'snippets/product' {
+                                    product : item,
+                                    slide   : false
+                                } %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    {% endif %}
+
+{% endif %}

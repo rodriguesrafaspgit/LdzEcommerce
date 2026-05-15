@@ -1,0 +1,70 @@
+{% set contador_menu = (contador_menu) ? contador_menu : 0 %}
+
+{%
+    if 
+        settings.pagina_extra_menu_nome_1|length > 0 and 
+        settings.pagina_extra_menu_link_1|length > 0 and 
+        settings.pagina_extra_menu_posicao_1 == posicao 
+%}
+
+    <li class="first-level menu-paginas-extras 1" {% if settings.pagina_extra_menu_cor_1|length > 0 %} style="background-color: {{ settings.pagina_extra_menu_cor_1 }} !important;" {% endif %} >
+                        
+        <a href="{{ settings.pagina_extra_menu_link_1 }}" title="{{ settings.pagina_extra_menu_nome_1 }}" {% if settings.pagina_extra_menu_cor_texto_1|length > 0 %} style="color: {{ settings.pagina_extra_menu_cor_texto_1 }} !important;" {% endif %} >
+            <div class="name">
+                {% if icones_menu[contador_menu]|length > 0 %}
+                    <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                    {% set contador_menu = contador_menu + 1 %}
+                {% endif %}
+                {{ settings.pagina_extra_menu_nome_1 }}
+            </div>
+        </a>
+        
+    </li>
+
+{% endif %}
+
+{%
+    if 
+        settings.pagina_extra_menu_nome_2|length > 0 and 
+        settings.pagina_extra_menu_link_2|length > 0 and 
+        settings.pagina_extra_menu_posicao_2 == posicao 
+%}
+
+    <li class="first-level menu-paginas-extras 2" {% if settings.pagina_extra_menu_cor_2|length > 0 %} style="background-color: {{ settings.pagina_extra_menu_cor_2 }} !important;" {% endif %} >
+                        
+        <a href="{{ settings.pagina_extra_menu_link_2 }}" title="{{ settings.pagina_extra_menu_nome_2 }}" {% if settings.pagina_extra_menu_cor_texto_2|length > 0 %} style="color: {{ settings.pagina_extra_menu_cor_texto_2 }} !important;" {% endif %}>
+            <div class="name">
+                {% if icones_menu[contador_menu]|length > 0 %}
+                    <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                    {% set contador_menu = contador_menu + 1 %}
+                {% endif %}
+                {{ settings.pagina_extra_menu_nome_2 }}
+            </div>
+        </a>
+        
+    </li>
+
+{% endif %}
+
+{%
+    if 
+        settings.pagina_extra_menu_nome_3|length > 0 and 
+        settings.pagina_extra_menu_link_3|length > 0 and 
+        settings.pagina_extra_menu_posicao_3 == posicao 
+%}
+
+    <li class="first-level menu-paginas-extras 3" {% if settings.pagina_extra_menu_cor_3|length > 0 %} style="background-color: {{ settings.pagina_extra_menu_cor_3 }} !important;" {% endif %} >
+                        
+        <a href="{{ settings.pagina_extra_menu_link_3 }}" title="{{ settings.pagina_extra_menu_nome_3 }}" {% if settings.pagina_extra_menu_cor_texto_3|length > 0 %} style="color: {{ settings.pagina_extra_menu_cor_texto_3 }} !important;" {% endif %}>
+            <div class="name">
+                {% if icones_menu[contador_menu]|length > 0 %}
+                    <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                    {% set contador_menu = contador_menu + 1 %}
+                {% endif %}
+                {{ settings.pagina_extra_menu_nome_3 }}
+            </div>
+        </a>
+        
+    </li>
+
+{% endif %}

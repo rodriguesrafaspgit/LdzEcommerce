@@ -1,0 +1,156 @@
+{% if vitrine_id == '1' %}
+    {% if not utils.is_mobile and (settings.banner_vitrine_1_1 or settings.banner_vitrine_1_2) %}
+        <div class="vitrine-banners">
+            <div class="container">
+                <div class="banners-grid banners-grid-2 flex justify-between">
+                    <div class="item box-banners">
+                        {% if settings.banner_vitrine_1_1 %}
+                            {% if settings.banner_vitrine_1_1_link|length > 0 %}
+                                <a href="{{ settings.banner_vitrine_1_1_link }}">
+                            {% endif %}
+                            <img src="{{ asset(settings.banner_vitrine_1_1) }}" class="lazyload" alt="Banner Vitrine">
+                            {% if settings.banner_vitrine_1_1_link|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="item box-banners">
+                        {% if settings.banner_vitrine_1_2 %}
+                            {% if settings.banner_vitrine_1_2_link|length > 0 %}
+                                <a href="{{ settings.banner_vitrine_1_2_link }}">
+                            {% endif %}
+                            <img src="{{ asset(settings.banner_vitrine_1_2) }}" class="lazyload" alt="Banner Vitrine">
+                            {% if settings.banner_vitrine_1_2_link|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elseif settings.banner_vitrine_1_mobile and utils.is_mobile %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_1_mobile_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_1_mobile_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_1_mobile) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_1_mobile_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if vitrine_id == '2' %}
+    {% if not utils.is_mobile and settings.banner_vitrine_2 %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_2_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_2_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_2) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_2_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% elseif settings.banner_vitrine_2_mobile and utils.is_mobile %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_2_mobile_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_2_mobile_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_2_mobile) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_2_mobile_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if vitrine_id == '3' %}
+    {% if not utils.is_mobile and ( settings.banner_vitrine_3_1 or settings.banner_vitrine_3_2 or settings.banner_vitrine_3_3 ) %}
+        <div class="vitrine-banners">
+            <div class="container">
+                <div class="banners-grid banners-grid-3 flex justify-between">
+                    <div class="item box-banners">
+                        {% if settings.banner_vitrine_3_1 %}
+                            {% if settings.banner_vitrine_3_1_link|length > 0 %}
+                                <a href="{{ settings.banner_vitrine_3_1_link }}">
+                            {% endif %}
+                            <img src="{{ asset(settings.banner_vitrine_3_1) }}" class="lazyload" alt="Banner Vitrine">
+                            {% if settings.banner_vitrine_3_1_link|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="item box-banners">
+                        {% if settings.banner_vitrine_3_2 %}
+                            {% if settings.banner_vitrine_3_2_link|length > 0 %}
+                                <a href="{{ settings.banner_vitrine_3_2_link }}">
+                            {% endif %}
+                            <img src="{{ asset(settings.banner_vitrine_3_2) }}" class="lazyload" alt="Banner Vitrine">
+                            {% if settings.banner_vitrine_3_2_link|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="item box-banners">
+                        {% if settings.banner_vitrine_3_3 %}
+                            {% if settings.banner_vitrine_3_3_link|length > 0 %}
+                                <a href="{{ settings.banner_vitrine_3_3_link }}">
+                            {% endif %}
+                            <img src="{{ asset(settings.banner_vitrine_3_3) }}" class="lazyload" alt="Banner Vitrine">
+                            {% if settings.banner_vitrine_3_3_link|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% elseif settings.banner_vitrine_3_mobile and utils.is_mobile %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_3_mobile_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_3_mobile_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_3_mobile) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_3_mobile_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if vitrine_id == '4' %}
+    {% if not utils.is_mobile and settings.banner_vitrine_4 %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_4_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_4_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_4) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_4_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% elseif settings.banner_vitrine_4_mobile and utils.is_mobile %}
+        <div class="vitrine-banners">
+            <div class="container box-banners mt-0">
+                {% if settings.banner_vitrine_4_mobile_link|length > 0 %}
+                    <a href="{{ settings.banner_vitrine_4_mobile_link }}">
+                {% endif %}
+                <img src="{{ asset(settings.banner_vitrine_4_mobile) }}" class="lazyload" alt="Banner Vitrine">
+                {% if settings.banner_vitrine_4_mobile_link|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

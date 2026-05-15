@@ -1,0 +1,265 @@
+{%
+    if settings.carrossel_categorias_ambiente == '0' 
+    or (settings.carrossel_categorias_ambiente == '1' and not utils.is_mobile) 
+    or (settings.carrossel_categorias_ambiente == '2' and utils.is_mobile)    
+%}
+
+    <div class="section section-categorias">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="title-section">
+                    {% if settings.carrossel_categorias_titulo|length > 0 %} 
+                        {{ settings.carrossel_categorias_titulo }}
+                    {% else %}
+                        Confira nossas Categorias
+                    {% endif %}
+                </h2>
+            </div>
+        </div>
+        <div class="container categorias-content swiper">
+
+            <div class="swiper-container">
+
+                <div class="swiper-wrapper">
+
+                    {% if settings.categoria_imagem_1|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_1|length > 0 %}
+                                <a href="{{ settings.categoria_link_1 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_1) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_1|length > 0%}  
+                                <strong>{{ settings.categoria_nome_1 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_1|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_2|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_2|length > 0 %}
+                                <a href="{{ settings.categoria_link_2 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_2) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_2|length > 0%}  
+                                <strong>{{ settings.categoria_nome_2 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_2|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_3|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_3|length > 0 %}
+                                <a href="{{ settings.categoria_link_3 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_3) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_3|length > 0%}  
+                                <strong>{{ settings.categoria_nome_3 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_3|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_4|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_4|length > 0 %}
+                                <a href="{{ settings.categoria_link_4 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_4) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_4|length > 0%}  
+                                <strong>{{ settings.categoria_nome_4 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_4|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_5|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_5|length > 0 %}
+                                <a href="{{ settings.categoria_link_5 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_5) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_5|length > 0%}  
+                                <strong>{{ settings.categoria_nome_5 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_5|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_6|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_6|length > 0 %}
+                                <a href="{{ settings.categoria_link_6 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_6) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_6|length > 0%}  
+                                <strong>{{ settings.categoria_nome_6 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_6|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_7|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_7|length > 0 %}
+                                <a href="{{ settings.categoria_link_7 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_7) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_7|length > 0%}  
+                                <strong>{{ settings.categoria_nome_7 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_7|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_8|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_8|length > 0 %}
+                                <a href="{{ settings.categoria_link_8 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_8) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_8|length > 0%}  
+                                <strong>{{ settings.categoria_nome_8 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_8|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_9|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_9|length > 0 %}
+                                <a href="{{ settings.categoria_link_9 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_9) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_9|length > 0%}  
+                                <strong>{{ settings.categoria_nome_9 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_9|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_10|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_10|length > 0 %}
+                                <a href="{{ settings.categoria_link_10 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_10) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_10|length > 0%}  
+                                <strong>{{ settings.categoria_nome_10 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_10|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_11|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_11|length > 0 %}
+                                <a href="{{ settings.categoria_link_11 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_11) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_10|length > 0%}  
+                                <strong>{{ settings.categoria_nome_11 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_11|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_12|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_12|length > 0 %}
+                                <a href="{{ settings.categoria_link_12 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_12) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_12|length > 0%}  
+                                <strong>{{ settings.categoria_nome_12 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_12|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_13|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_13|length > 0 %}
+                                <a href="{{ settings.categoria_link_13 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_13) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_13|length > 0%}  
+                                <strong>{{ settings.categoria_nome_13 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_13|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_14|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_14|length > 0 %}
+                                <a href="{{ settings.categoria_link_14 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_14) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_14|length > 0%}  
+                                <strong>{{ settings.categoria_nome_14 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_14|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.categoria_imagem_15|length > 0 %}
+                        <div class="swiper-slide">
+                            {% if settings.categoria_link_15|length > 0 %}
+                                <a href="{{ settings.categoria_link_15 }}">
+                            {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.categoria_imagem_15) }}" alt="Nossas categorias">
+                            {% if settings.categoria_nome_15|length > 0%}  
+                                <strong>{{ settings.categoria_nome_15 }}</strong>
+                            {% endif %}
+                            {% if settings.categoria_link_15|length > 0 %}
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <div class="dots">
+                    
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endif %}

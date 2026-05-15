@@ -1,0 +1,51 @@
+{% if local == 'cabecalho' %}
+    <div class="social-media-icones text-right">
+{% endif %}
+
+    {% if settings.facebook_profile %}
+        <a href="{{ settings.facebook_profile }}" title="Facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-facebook v-align-middle"></i>
+        </a>
+    {% endif %}
+
+    {% if settings.instagram_profile %}
+        <a href="{{ settings.instagram_profile }}" title="Instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-instagram v-align-middle"></i>
+        </a>
+    {% endif %}
+
+    {% if settings.tiktok_profile %}
+        <a href="{{ settings.tiktok_profile }}" title="TikTok" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-tiktok v-align-middle"></i>
+        </a>
+    {% endif %}
+
+    {% if settings.twitter_profile %}
+        <a href="{{ settings.twitter_profile }}" title="Twitter" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon icon-twitter v-align-middle" viewBox="0 0 16 16">
+                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+              </svg>
+        </a>
+    {% endif %}
+
+    {% if settings.youtube_profile %}
+        <a href="{{ settings.youtube_profile }}" title="Youtube" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-youtube v-align-middle"></i>
+        </a>
+    {% endif %}
+
+    {% if settings.pinterest_profile %}
+        <a href="{{ settings.pinterest_profile }}" title="Pinterest" aria-label="Pinterest" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-pinterest v-align-middle"></i>
+        </a>
+    {% endif %}
+
+    {% if settings.linkedin_profile %}
+        <a href="{{ settings.linkedin_profile }}" title="Linkedin" aria-label="Linkedin" target="_blank" rel="noopener noreferrer">
+            <i class="icon icon-linkedin v-align-middle"></i>
+        </a>
+    {% endif %}
+
+{% if local == 'cabecalho' %}
+    </div>
+{% endif %}

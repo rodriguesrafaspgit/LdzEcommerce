@@ -1,0 +1,54 @@
+{% set tabelas = [] %}
+
+{% for i in 1..10 %}
+    {% set exibir = attribute(settings, 'exibir_tabela_medidas_' ~ i) %}
+    {% set texto = attribute(settings, 'tabela_medidas_botao_texto_' ~ i) %}
+    {% set tmc = attribute(settings, 'tabela_medidas_categoria_' ~ i) %}
+    {% set tmp = attribute(settings, 'tabela_medidas_products_' ~ i) %}
+
+    {% if exibir %}
+        {% set tabelas = tabelas|merge([{ 'exibir': exibir, 'tmc': tmc, 'tmp': tmp, 'texto': texto, 'pos': i }]) %}
+    {% endif %}
+{% endfor %}
+
+{% if tabelas %}
+    {% for tabela in tabelas %}
+        {% if tabela.tmp|length > 0 %}
+
+            {% set arrayprd = tabela.tmp|split(',') %}
+
+            {% if idproduct in arrayprd %}
+                <a href="#modalTabelaMedidas" data-toggle="modal" data-target="#modalTabelaMedidas{{ tabela.pos }}" class="tabela-medidas tabela-medidas-{{ tabela.pos }}"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path> 
+                    </svg>  
+                    
+                    {% if tabela.texto|length > 0  %}
+                        {{ tabela.texto }}
+                    {% else %}
+                        Tabela de Medidas
+                    {% endif %}
+                </a>
+            {% endif %}
+                
+        {% elseif tabela.tmc|length > 0  %}
+
+            {% set arraycat = tabela.tmc|split(',') %}
+           
+            {% if category in arraycat %}
+                <a href="#modalTabelaMedidas" data-toggle="modal" data-target="#modalTabelaMedidas{{ tabela.pos }}" class="tabela-medidas tabela-medidas-{{ tabela.pos }}"> 
+                    <svg xmlns="http://www.w3.org/2000/svg" height="18px" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path> 
+                    </svg>  
+                
+                    {% if tabela.texto|length > 0  %}
+                        {{ tabela.texto }}
+                    {% else %}
+                        Tabela de Medidas
+                    {% endif %}
+                </a>
+            {% endif %}
+                
+        {% endif %}
+    {% endfor %}
+{% endif %}

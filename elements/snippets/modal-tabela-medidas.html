@@ -1,0 +1,37 @@
+{% set tabelas = [] %}
+
+{% for i in 1..10 %}
+    {% set exibir = attribute(settings, 'exibir_tabela_medidas_' ~ i) %}
+    {% set texto = attribute(settings, 'tabela_medidas_botao_texto_' ~ i) %}
+    {% set imagem = attribute(settings, 'tabela_medidas_imagem_' ~ i) %}
+
+    {% if exibir %}
+        {% set tabelas = tabelas|merge([{ 'exibir': exibir, 'texto': texto, 'imagem': imagem, 'pos': i }]) %}
+    {% endif %}
+{% endfor %}
+
+{% if tabelas %}
+    {% for tabela in tabelas %}
+        <div id="modalTabelaMedidas{{ tabela.pos }}" class="modal hide in modal-tabela-medidas" tabindex="-1" aria-labelledby="modalTabelaMedidasLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+                <span class="titulo cor-secundaria">
+                    {% if tabela.texto|length > 0 %}
+                        {{ tabela.texto }}
+                    {% else %}
+                        Tabela de Medidas
+                    {% endif %}
+                </span>
+            </div>
+            <div class="modal-body">
+                {% if tabela.imagem %}
+                    <img src="{{ asset(tabela.imagem) }}" style="max-width: 100%;">
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}

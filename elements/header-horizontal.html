@@ -1,0 +1,264 @@
+{% if settings.exibir_header_bottom_mobile %}
+    {% element 'snippets/novo-header-mobile' %}
+{% endif %}
+<header class="header">
+
+    {% element 'snippets/barra-oferta-cabecalho' %}
+
+    <div class="bg">
+
+        <div class="container menu-horizontal">
+
+            {% if utils.is_mobile %}
+
+                <div class="menu-horizontal-item icone-menu-lateral">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </span>
+                </div>
+
+                {% if settings.exibir_barra_pesquisa_fixa != '1' %}
+                    <div class="menu-horizontal-item icone-menu-pesquisar">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                    </div>
+                {% endif %}
+
+                <div class="logo-menu-horizontal">
+                    <a class="logo" href="{{ store.url }}" title="{{ store.name }}">
+                        
+                        {% if settings.logo|length > 0 %}
+                            <img src="{{ asset(settings.logo) }}" alt="{{ store.name }}" width="222" height="36">
+                        {% else %}
+                            <div class="title-store">{{ store.name }}</div>
+                        {% endif %}
+                    </a>
+                </div>
+
+                <div class="menu-horizontal-item minha-conta-menu-horizontal item-menu login-user flex">
+
+                    <a href="{{ links.login }}" title="Minha Conta">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 2px;" width="26" height="26" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                    </a>
+                    
+                </div>
+
+                <div class="meu-carrinho-menu-horizontal item-menu flex cart">
+
+                    {% if settings.carrinho_compras_tipo == '2' %}
+                        <div class="carrinho-lateral-on">
+                    {% else %}
+                        <a href="{{ links.cart }}" title="Carrinho">
+                    {% endif %}
+
+                        {% if settings.icone_carrinho_compras == '1' %}
+                            <!-- Carrinho de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        {% endif %}
+                        
+                        {% if settings.icone_carrinho_compras == '2' %}
+                            <!-- Bolsa de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                            </svg>
+                        {% endif %}
+
+                        {% if settings.icone_carrinho_compras == '3' %}
+                            <!-- Cesta de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                                <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                            </svg>
+                        {% endif %}
+                        
+                    {% if settings.carrinho_compras_tipo == '2' %}
+                        </div>
+                    {% else %}
+                        </a>
+                    {% endif %}
+
+                    <div class="cart-quantity" data-cart="amount">0</div>
+
+                </div>
+
+            {% else %}
+
+                <div class="menu-horizontal-item icone-menu-lateral">
+                    <span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </span>
+                </div>
+
+                {% if settings.exibir_barra_pesquisa_fixa != '1' %}
+                    <div class="menu-horizontal-item icone-menu-pesquisar">
+                        <span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </span>
+                    </div>
+                {% endif %}
+
+                <div class="menu-horizontal-item logo-menu-horizontal">
+                    <a class="logo" href="{{ store.url }}" title="{{ store.name }}">
+                        {% if settings.logo|length > 0 %}
+                            <img src="{{ asset(settings.logo) }}" alt="{{ store.name }}" width="222" height="36">
+                        {% else %}
+                            <div class="title-store">{{ store.name }}</div>
+                        {% endif %}
+                        
+                    </a>
+                </div>
+
+                <div class="menu-horizontal-item menu-menu-horizontal">
+                    
+                    {% element 'snippets/menu-horizontal' %}
+
+                </div>
+
+                <div class="menu-horizontal-item minha-conta-menu-horizontal item-menu login-user flex">
+
+                    <a href="{{ links.login }}" title="Minha Conta">
+                        <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: 2px;" width="26" height="26" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+                        </svg>
+                    </a>
+
+                    <div class="item-menu-dropdown login-dropdown">
+
+                        <p class="tray-hide" data-logged-user="true">
+                            <a href="{{ links.central }}" title="Minha Conta"> 
+                                <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-ul" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M5 11.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm-3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm0 4a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                </svg> 
+                                Minha Conta
+                            </a> 
+                        </p>
+                        
+                        <div class="linha tray-hide" data-logged-user="true"></div>
+
+                        <p class="tray-hide" data-logged-user="false">
+                            <a href="{{ links.login }}">
+                                <svg style="margin-bottom: -4px; margin-left: -3px;" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -3px;" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+                                    <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                                Entrar Agora
+                            </a>
+                        </p>
+
+                        <p>
+                            <a href="{{ links.orders }}">
+                                <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+                                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+                                </svg> 
+                                Meus Pedidos
+                            </a>
+                        </p>
+
+                        <div class="linha"></div>
+
+                        <div class="text-right tray-hide" data-logged-user="true">
+                            <a href="{{ links.logout }}" title="Sair">
+                                Sair 
+                                <svg style="margin-bottom: -4px;" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -3px;" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                    <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <p class="tray-hide" data-logged-user="false">
+                            <a href="{{ links.register }}">
+                                <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -3px;" width="18" height="18" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
+                                    <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                                    <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                                </svg> 
+                                Criar Conta
+                            </a>
+                        </p>
+
+                    </div>
+                    
+                </div>
+
+                <div class="meu-carrinho-menu-horizontal item-menu flex cart">
+
+                    {% if settings.carrinho_compras_tipo == '2' %}
+                        <div class="carrinho-lateral-on">
+                    {% else %}
+                        <a href="{{ links.cart }}" title="Carrinho">
+                    {% endif %}
+
+                        {% if settings.icone_carrinho_compras == '1' %}
+                            <!-- Carrinho de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        {% endif %}
+                        
+                        {% if settings.icone_carrinho_compras == '2' %}
+                            <!-- Bolsa de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-bag-check" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                            </svg>
+                        {% endif %}
+
+                        {% if settings.icone_carrinho_compras == '3' %}
+                            <!-- Cesta de compras -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                                <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                            </svg>
+                        {% endif %}
+                        
+                    {% if settings.carrinho_compras_tipo == '2' %}
+                        </div>
+                    {% else %}
+                        </a>
+                    {% endif %}
+
+                    <div class="cart-quantity" data-cart="amount">0</div>
+
+                    {% if settings.carrinho_compras_tipo == '1' %}
+                        <div class="item-menu-dropdown cart-dropdown">
+
+                            <div class="carrinho-ajax">
+                                <p>
+                                    Carrinho Vazio
+                                </p>
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                </div>
+            
+            {% endif %}
+
+        </div>
+
+        <div class="container menu-horizontal-busca {{ (settings.exibir_barra_pesquisa_fixa == '1')? 'active box-search-fixed':'' }}">
+
+            {% element 'snippets/header-search' %}
+
+        </div>
+
+    </div>
+
+</header>
+
+{% element 'snippets/menu-lateral' %}

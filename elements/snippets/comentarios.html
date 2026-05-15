@@ -1,0 +1,182 @@
+ <div class="container">
+
+    <div class="swiper-comentarios swiper-container swiper-geral">
+
+        <div class="comentarios-itens swiper-wrapper">
+
+            {% if settings.comentario_nome_1|length > 0 and settings.comentario_depoimento_1|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_1|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_1) }}" alt="{{ settings.comentario_nome_1 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_1 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_1 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_2|length > 0 and settings.comentario_depoimento_2|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_2|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_2) }}" alt="{{ settings.comentario_nome_2 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_2 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_2 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_3|length > 0 and settings.comentario_depoimento_3|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_3|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_3) }}" alt="{{ settings.comentario_nome_3 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_3 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_3 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_4|length > 0 and settings.comentario_depoimento_4|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_4|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_4) }}" alt="{{ settings.comentario_nome_4 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_4 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_4 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_5|length > 0 and settings.comentario_depoimento_5|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_5|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_5) }}" alt="{{ settings.comentario_nome_5 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_5 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_5 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_6|length > 0 and settings.comentario_depoimento_6|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_6|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_6) }}" alt="{{ settings.comentario_nome_6 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_6 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_6 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_7|length > 0 and settings.comentario_depoimento_7|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_7|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_7) }}" alt="{{ settings.comentario_nome_7 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_7 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_7 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_8|length > 0 and settings.comentario_depoimento_8|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_8|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_8) }}" alt="{{ settings.comentario_nome_8 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_8 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_8 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if settings.comentario_nome_9|length > 0 and settings.comentario_depoimento_9|length %}
+                <div class="comentario-item swiper-slide">
+                    {% if settings.comentario_imagem_9|length > 0 %}
+                        <div class="comentario-item-imagem">
+                            <img loading="lazy" src="{{ asset(settings.comentario_imagem_9) }}" alt="{{ settings.comentario_nome_9 }}">
+                        </div>
+                    {% endif %}
+                    <div class="comentario-conteudo">
+                        <div class="comentario-item-nome">
+                            {{settings.comentario_nome_9 }}
+                        </div>
+                        <div class="comentario-item-depoimento">
+                            "{{settings.comentario_depoimento_9 }}"
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+        <div class="dots"></div>
+
+        <div class="prev">
+            <i class="icon icon-arrow-left"></i>
+        </div>
+        <div class="next">
+            <i class="icon icon-arrow-right"></i>
+        </div>
+
+    </div>
+
+</div>

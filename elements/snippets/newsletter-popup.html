@@ -1,0 +1,80 @@
+<div id="modal-newsletter">
+    <modal v-if="showModal" @close="showModal = false">
+        <div slot="body">
+
+            <div class="box-newsletter-popup {% if settings.newsletter_popup_banner|length <= 0 %}no-image{% endif %}">
+
+                {% if settings.newsletter_popup_banner|length > 0 and not utils.is_mobile %}
+                    <div 
+                        class="box-newsletter-popup-item box-newsletter-popup-item-bg" 
+                        style="background-image: url('{{ asset(settings.newsletter_popup_banner) }}');"
+                    >
+                    </div>
+                {% endif %}
+
+                <div class="box-newsletter-popup-item">
+
+                    <div class="box-newsletter-popup-item-form">
+
+                        {% if settings.newsletter_popup_titulo|length > 0 %}
+                            <h3>{{ settings.newsletter_popup_titulo }}</h3>
+                        {% else %}
+                            <h3>Newsletter</h3>
+                        {% endif %}
+
+                        {% if settings.newsletter_popup_descricao|length > 0 %}
+                            <p>{{ settings.newsletter_popup_descricao }}</p>
+                        {% else %}
+                            <p>
+                                Cadastre-se aqui e receba as melhores ofertas em seu e-mail.
+                            </p>
+                        {% endif %}
+
+                        <form action="{{ links.newsletter }}" method="post">
+                            <input type="hidden" name="loja" value="{{ store.id }}">
+                            <input name="name" type="text" placeholder="Digite seu nome">
+                            <input name="email" type="text" placeholder="Digite seu e-mail">
+                            {% if settings.newsletter_popup_texto_botao|length > 0 %}
+                                <button>{{ settings.newsletter_popup_texto_botao }}</button>
+                            {% else %}
+                                <button>Cadastrar</button>
+                            {% endif %}
+                        </form>
+
+                        {% if settings.exibir_newsletter_popup_links == '1' %}
+
+                            <div class="box-newsletter-divider"></div>
+
+                            <div class="box-newsletter-popup-item-links">
+                                <a href="{{ links.central }}"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-percent" viewBox="0 0 16 16">
+                                        <path d="M13.442 2.558a.625.625 0 0 1 0 .884l-10 10a.625.625 0 1 1-.884-.884l10-10a.625.625 0 0 1 .884 0zM4.5 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm7 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm0 1a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"></path>
+                                    </svg> <br />
+                                    Meus Pedidos 
+                                </a>
+                                <a href="{{ links.login }}"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"></path>
+                                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"></path>
+                                    </svg> <br />
+                                    Minha Conta 
+                                </a>
+                                <a href="{{ links.contact }}"> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat" viewBox="0 0 16 16">
+                                        <path d="M2.678 11.894a1 1 0 0 1 .287.801 10.97 10.97 0 0 1-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 0 1 .71-.074A8.06 8.06 0 0 0 8 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 0 1-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 0 0 .244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 0 1-2.347-.306c-.52.263-1.639.742-3.468 1.105z"></path>
+                                    </svg> <br />
+                                    Contato 
+                                </a>
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </modal>
+</div>

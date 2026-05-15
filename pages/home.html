@@ -1,0 +1,145 @@
+{% if settings.cupom_exibir == '1' %}
+    {% element 'snippets/cupom-especial' %}
+{% endif %}
+
+{% element 'snippets/banners-full' %}
+
+{% element 'snippets/barra-oferta-full-banners' %}
+
+{% element 'snippets/banner-tarja' %}
+
+{% element 'snippets/banners-mini' %}
+
+{% if settings.exibir_categorias == '1' %}
+
+    {% element 'snippets/categorias' %}
+
+{% endif %}
+
+<!-- Promocao em Destaque -->
+{% if settings.exibir_promocao_destaque == '1' %}
+    {% element 'promocao-destaque' %}
+{% endif %}
+
+{% if settings.exibir_vitrine_personalizada == '1' and settings.vitrine_personalizada_posicao == '1' and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+    {% element 'showcase-personalizado' %}
+{% endif %}
+
+{# 1 showcase #}
+{% if settings.showcase_type_1 != 'inativo' %}
+    {% element 'showcase' {
+        'id'       : 'showcase1',
+        'title'    : settings.showcase_titulo_1, 
+        'rand'     : settings.showcase_rand_products,
+        'type'     : settings.showcase_type_1,
+        'quantity' : settings.showcase_quantity_1,
+        'ddesk' : settings.showcase_display_desktop_1,
+        'dmobile' : settings.showcase_display_mobile_1,
+        'loop'    : settings.showcase_display_loop_1
+    } %}
+{% endif %}
+
+{% element 'snippets/banners-vitrine' { vitrine_id: '1' } %} 
+
+{% if settings.exibir_vitrine_personalizada == '1' and settings.vitrine_personalizada_posicao == '2' and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+    {% element 'showcase-personalizado' %}
+{% endif %}
+
+{# 2 showcase #}
+{% if settings.showcase_type_2 != 'inativo' %}
+    {% element 'showcase' {
+        'id'       : 'showcase2',
+        'title'    : settings.showcase_titulo_2, 
+        'rand'     : settings.showcase_rand_products,
+        'type'     : settings.showcase_type_2,
+        'quantity' : settings.showcase_quantity_2,
+        'ddesk' : settings.showcase_display_desktop_2,
+        'dmobile' : settings.showcase_display_mobile_2,
+        'loop'    : settings.showcase_display_loop_2
+    } %}
+{% endif %}
+
+{% element 'snippets/banners-vitrine' { vitrine_id: '2' } %} 
+
+{% if settings.exibir_vitrine_personalizada == '1' and settings.vitrine_personalizada_posicao == '3' and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+    {% element 'showcase-personalizado' %}
+{% endif %}
+
+{# 3 showcase #}
+{% if settings.showcase_type_3 != 'inativo' %}
+    {% element 'showcase' {
+        'id'       : 'showcase3',
+        'title'    : settings.showcase_titulo_3, 
+        'rand'     : settings.showcase_rand_products,
+        'type'     : settings.showcase_type_3,
+        'quantity' : settings.showcase_quantity_3,
+        'ddesk' : settings.showcase_display_desktop_3,
+        'dmobile' : settings.showcase_display_mobile_3,
+        'loop'    : settings.showcase_display_loop_3
+    } %}
+{% endif %}
+
+{% element 'snippets/banners-vitrine' { vitrine_id: '3' } %} 
+
+{% if settings.exibir_vitrine_personalizada == '1' and settings.vitrine_personalizada_posicao == '4' and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+    {% element 'showcase-personalizado' %}
+{% endif %}
+
+{# 4 showcase #}
+{% if settings.showcase_type_4 != 'inativo' %}
+    {% element 'showcase' {
+        'id'       : 'showcase4',
+        'title'    : settings.showcase_titulo_4, 
+        'rand'     : settings.showcase_rand_products,
+        'type'     : settings.showcase_type_4,
+        'quantity' : settings.showcase_quantity_4,
+        'ddesk' : settings.showcase_display_desktop_4,
+        'dmobile' : settings.showcase_display_mobile_4,
+        'loop'    : settings.showcase_display_loop_4
+    } %}
+{% endif %}
+
+{% if settings.exibir_vitrine_personalizada == '1' and settings.vitrine_personalizada_posicao == '5' and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+    {% element 'showcase-personalizado' %}
+{% endif %}
+
+{% element 'snippets/banners-vitrine' { vitrine_id: '4' } %} 
+
+{# element 'snippets/banner-line' { 'banner_id': 'extra4' } #}
+{# element 'snippets/banner-line' { 'banner_id': 'extra5', 'mobile': true } #}
+
+{% if settings.habilitar_comentarios == '1' %}
+
+    <div class="section section-comentarios">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="title-section">
+                    {{ settings.comentario_titulo }}
+                </h2>
+                {% if settings.comentario_descricao|length > 0 %}
+                    <p>
+                        {{ settings.comentario_descricao }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        {% element 'snippets/comentarios' %}
+    </div>
+
+{% endif %}
+
+{% if settings.exibir_marcas == '1' %}
+    {% element 'snippets/marcas' %}
+{% endif %}
+
+{% if settings.news_active and settings.newsletter_posicao == '1' %}
+    {% element 'snippets/newsletter' { 'posicao': '1' } %}
+{% endif %}
+
+{% element 'snippets/noticias' %}
+
+{% element 'snippets/avaliacoes' %}
+
+{% if settings.exibir_video_pagina_inicial == '1' %}
+    {% element 'snippets/video-pagina-inicial' %}
+{% endif %}

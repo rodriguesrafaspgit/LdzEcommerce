@@ -1,0 +1,99 @@
+<div class="product">
+
+    <div class="product-header">
+
+        <div class="w-100">
+
+            <div class="image">
+    
+                {% set image_class = slide ? 'swiper-lazy' : 'lazyload' %}
+    
+                <a href="{{ product.link }}" class="space-image">
+                    <img loading="lazy" class="{{ image_class }} {% if product.images[1].full %} imagem-produto-1 {% endif %}" src="{{ asset('img/empty.png') }}" data-src="{{ product.images[0].full }}" alt="{{ product.name }}">
+                    {% if product.images[1].full %}
+                        <img loading="lazy" class="{{ image_class }} imagem-produto-2" src="{{ asset('img/empty.png') }}" data-src="{{ product.images[1].large }}" alt="{{ product.name }}">
+                    {% endif %}
+                </a>
+    
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="product-body">
+
+        <a class="product-info" href="{{ product.link }}">
+
+            <div class="product-info-dados">
+    
+                <div class="product-name">
+                    {{ product.name }}
+                </div>
+    
+                {% if settings.listagem_produtos_exibir_timer_prodmocao == '1' %}
+                    {% if product.start_promotion != '0000-00-00' and product.end_promotion != '0000-00-00' %}
+                        <div class="listagem-produtos-timer-promocao" data-inicial="{{ product.start_promotion }}" data-final="{{ product.end_promotion }}"></div>
+                    {% endif %}
+                {% endif %}
+    
+                {% if settings.comprar_somente_cliente_logado != '1' %}
+
+                <div class="product-price tray-hide" data-logged-user="true">
+                    {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+    
+                        {% element 'snippets/product-price' { 'product': product } %}
+    
+                    {% elseif product.upon_request %}
+    
+                        {% element 'snippets/product-message' { 'product_message': 'Sob consulta', 'know_more' : 'Saiba mais' } %}
+    
+                    {% elseif product.stock <= 0 %}
+    
+                        {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar' } %}
+    
+                    {% else %}
+    
+                        {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar'  } %}
+    
+                    {% endif %}
+                </div>
+                {% endif %} 
+
+            </div>
+    
+        </a>
+
+        {% if settings.comprar_somente_cliente_logado == '1' %}
+        <div class="autenticacao-comprar-produto tray-hide" data-logged-user="false">
+            <a href="{{ links.login }}">
+                <div class="w-100">
+                    {% if settings.comprar_somente_cliente_logado_frase|length == 0 %}
+                        Para realizar a compra, por favor realize o Login
+                    {% else %}
+                        {{ settings.comprar_somente_cliente_logado_frase }}
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="product-footer">
+
+        <div class="w-100">
+
+            {% if settings.show_product_review %}
+                {% element 'snippets/rating-catalog' {
+                    'review': product.ranking,
+                    'total' : true
+                } %}
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</div>

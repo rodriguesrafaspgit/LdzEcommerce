@@ -1,0 +1,121 @@
+{# Set tray variables to more semantic variables #}
+
+{% set filter_titles = {
+    'categories'   : 'Categorias',
+    'prices'       : 'Preços',
+    'availability' : 'Disponibilidade',
+    'brands'       : 'Marcas'
+} %}
+
+{% set filter_type_key = {
+    'categories'   : 'categories',
+    'prices'       : 'price',
+    'availability' : 'availability',
+    'brands'       : 'brand'
+} %}
+
+<form class="smart-filter" name="form-filter" method="get">
+
+    <input type="hidden" name="loja" value="{{ store.id }}">
+
+    {% if search.word %}
+        <input name="palavra_busca" type="hidden" value="{{ search.word }}">
+    {% endif %}
+
+    {% if category.id %}
+        <input type="hidden" name="categoria" value="{{ category.id }}">
+    {% endif %}
+
+    <div class="filters">
+
+        {% for myFilter in filters %}
+            
+            {% if myFilter.items %}
+                <section class="filter-block filter-block">
+                    
+                    <h4 class="filter-title">
+                        {{ myFilter.title }}
+                    </h4>
+                    <ul class="filter-list" {% if settings.show_filter_type_closed %} style="display: none" {% endif %}>
+                        {% for item in myFilter.items %}
+                            <li class="filter-item">
+                                {% if item.type == "link" %}
+                                    <a href="{{ item.url }}">{{ item.title }}</a>
+                                {% endif %}
+                                
+                                {% if item.type == "checkbox" %}
+                                    {% set checked = item.applied ? 'checked="checked"' %}
+                                    {% if item.url != '' %}
+                                        <input type="checkbox" class="filter-input" id="{{ id | lower }}" name="{{ item.name }}" value="{{ item.value }}" {{ checked }}>
+                                        <a href="{{ item.url }}">
+                                            {{ item.title }}
+                                        </a>
+                                    {% else %}
+                                        <div class="filter-checkbox">
+                                            <input type="checkbox" class="filter-input" id="{{ id | lower }}" name="{{ item.name }}" value="{{ item.value }}" {{ checked }}>
+                                            <label class="filter-label" for="{{ id | lower }}">
+                                                <span class="filter-name">
+                                                    {{ item.title }}
+                                                </span>
+                                            </label>
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+                
+            {% elseif myFilter|length %}
+
+                {% for var in myFilter %}
+                    {% if var|length > 0 and var.items|length > 0 %}
+                        <section class="filter-block filter-block-properties">
+
+                            <h4 class="filter-title">
+                                {{ var.title }}
+                            </h4>
+                            <ul class="filter-list" {% if settings.show_filter_type_closed %} style="display: none;" {% endif %}>
+                                {% for item in var.items %}
+                                    {% set type = item.type %}
+    
+                                    <li class="filter-item">
+                                        {% if item.type == "link" %}
+                                            <a href="{{ item.url }}">{{ item.title }}</a>
+                                        {% endif %}
+                                        
+                                        {% if item.type == "checkbox" %}
+                                            {% set checked = item.applied ? 'checked="checked"' %}
+                                            {% if item.url != '' %}
+                                                <input type="checkbox" class="filter-input" id="{{ label_for | lower }}" name="{{ item.name }}" value="{{ item.value }}" {{ checked }}>
+                                                <a href="{{ item.url }}">
+                                                    {{ item.title }}
+                                                </a>
+                                            {% else %}
+                                                <div class="filter-checkbox">
+                                                    <input type="checkbox" class="filter-input" id="{{ label_for | lower }}" name="{{ item.name }}" value="{{ item.value }}" {{ checked }}>
+                                                    <label class="filter-label" for="{{ label_for | lower }}">
+                                                        <span class="filter-name">{{ item.title }}</span>
+                                                    </label>
+                                                </div>
+                                           {% endif %} 
+                                        {% endif %}
+                                    </li>
+    
+                                {% endfor %}
+                            </ul>
+    
+                        </section>
+                    {% endif %}
+                {% endfor %}
+
+            {% endif %}
+
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="filter-button">
+        Filtrar
+    </button>
+
+</form>

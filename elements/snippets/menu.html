@@ -1,0 +1,286 @@
+{% set more_quantity = (settings.menu_quantidade_itens and settings.menu_quantidade_itens matches '/^\\d+$/') ? settings.menu_quantidade_itens : 6 %}
+
+{% if categories | length > more_quantity %}
+    {% set show_categories = categories | slice(0, more_quantity) %}
+    {% set more_categories = categories | slice(more_quantity) %}
+{% else %}
+    {% set show_categories = categories %}
+    {% set more_categories = null %}
+{% endif %}
+
+{% if settings.menu_disposicao == '1' %}
+    {% set menu_disposicao_class = 'justify-center' %}
+{% elseif settings.menu_disposicao == '2' %}
+    {% set menu_disposicao_class = 'justify-between' %}
+{% elseif settings.menu_disposicao == '3' %}
+    {% set menu_disposicao_class = '' %}
+{% elseif settings.menu_disposicao == '4' %}
+    {% set menu_disposicao_class = 'justify-end' %}
+{% else %}
+    {% set menu_disposicao_class = 'justify-center' %}
+{% endif %}
+
+{%
+    set icones_menu = [
+        settings.icone_menu_imagem_1,
+        settings.icone_menu_imagem_2,
+        settings.icone_menu_imagem_3,
+        settings.icone_menu_imagem_4,
+        settings.icone_menu_imagem_5,
+        settings.icone_menu_imagem_6,
+        settings.icone_menu_imagem_7,
+        settings.icone_menu_imagem_8,
+        settings.icone_menu_imagem_9,
+        settings.icone_menu_imagem_10,
+        settings.icone_menu_imagem_11,
+        settings.icone_menu_imagem_12,
+        settings.icone_menu_imagem_13,
+        settings.icone_menu_imagem_14,
+        settings.icone_menu_imagem_15
+    ]
+%}
+
+{% set contador_menu = 0 %}
+
+{% if settings.pagina_extra_menu_nome_1|length > 0 and settings.pagina_extra_menu_link_1|length > 0 and settings.pagina_extra_menu_posicao_1 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+{% if settings.pagina_extra_menu_nome_2|length > 0 and settings.pagina_extra_menu_link_2|length > 0 and settings.pagina_extra_menu_posicao_2 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+{% if settings.pagina_extra_menu_nome_3|length > 0 and settings.pagina_extra_menu_link_3|length > 0 and settings.pagina_extra_menu_posicao_3 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+<nav class="nav nav-padrao">
+    <div class="container menu-padrao">
+        <ul class="list flex {{ menu_disposicao_class }}">
+
+            {% element 'snippets/menu-paginas-extras' {'posicao': 1, 'icones_menu': icones_menu} %}
+
+            {% set cont_sub_menu = 1 %}
+
+            {% for key,category in show_categories %}
+                <li class="first-level {%- if category.children %} sub {%- endif %}">
+                    
+                    <a href="{{ category.link }}" title="{{ category.name }}">
+                        <div class="name">
+
+                            {% if icones_menu[contador_menu]|length > 0 %}
+                                <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                            {% endif %}
+
+                            {% set contador_menu = contador_menu + 1 %}
+
+                            {{ category.name }}
+
+                        </div>
+                    </a>
+                    
+                    {% if category.children %}
+                    
+                        <div class="sub-list second-level">
+
+                            <ul>
+                        
+                                <a href="{{ category.link }}" title="{{ category.name }}">{{ category.name }}</a>
+        
+                                {% for level2 in category.children %}
+        
+                                    <li {% if level2.children %} class="sub" {% endif %}>
+                                        
+                                        <a href="{{ level2.link }}" title="{{ level2.name }}">{{ level2.name }}</a>
+                                    
+                                        {% if level2.children %}
+                                        <ul class="sub-list third-level">
+                                            {% for level3 in level2.children %}
+                                            <li>
+                                                <a href="{{ level3.link }}" title="{{ level3.name }}">{{ level3.name }}</a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                        {% endif %} 
+        
+                                    </li>
+        
+                                {% endfor %}                        
+        
+                            </ul>
+
+                            {% if cont_sub_menu == 1 and settings.menu_categoria_produto_1|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-1"></div>
+
+                            {% elseif settings.menu_categoria_imagem_1|length > 0 and cont_sub_menu == 1 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_1, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 2 and settings.menu_categoria_produto_2|length > 0 %}
+                                
+                                <div class="categoria-produto menu-categoria-product-2"></div>
+
+                            {% elseif settings.menu_categoria_imagem_2|length > 0 and cont_sub_menu == 2 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_2, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 3 and settings.menu_categoria_produto_3|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-3"></div>
+
+                            {% elseif settings.menu_categoria_imagem_3|length > 0 and cont_sub_menu == 3 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_3, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 4 and settings.menu_categoria_produto_4|length > 0 %}
+                                
+                                <div class="categoria-produto menu-categoria-product-4"></div>
+
+                            {% elseif settings.menu_categoria_imagem_4|length > 0 and cont_sub_menu == 4 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_4, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 5 and settings.menu_categoria_produto_5|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-5"></div>
+
+                            {% elseif settings.menu_categoria_imagem_5|length > 0 and cont_sub_menu == 5 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_5, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 6 and settings.menu_categoria_produto_6|length > 0 %}
+                                        
+                                <div class="categoria-produto menu-categoria-product-6"></div>
+
+                            {% elseif settings.menu_categoria_imagem_6|length > 0 and cont_sub_menu == 6 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_6, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 7 and settings.menu_categoria_produto_7|length > 0 %}
+                                        
+                                <div class="categoria-produto menu-categoria-product-7"></div>
+
+                            {% elseif settings.menu_categoria_imagem_7|length > 0 and cont_sub_menu == 7 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_7, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 8 and settings.menu_categoria_produto_8|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-8"></div>
+
+                            {% elseif settings.menu_categoria_imagem_8|length > 0 and cont_sub_menu == 8 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_8, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 9 and settings.menu_categoria_produto_9|length > 0 %}
+                                        
+                                <div class="categoria-produto menu-categoria-product-9"></div>
+
+                            {% elseif settings.menu_categoria_imagem_9|length > 0 and cont_sub_menu == 9 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_9, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 10 and settings.menu_categoria_produto_10|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-10"></div>
+
+                            {% elseif settings.menu_categoria_imagem_10|length > 0 and cont_sub_menu == 10 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_10, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 11 and settings.menu_categoria_produto_11|length > 0 %}
+                                        
+                                <div class="categoria-produto menu-categoria-product-11"></div>
+
+                            {% elseif settings.menu_categoria_imagem_11|length > 0 and cont_sub_menu == 11 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_11, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 12 and settings.menu_categoria_produto_12|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-12"></div>
+
+                            {% elseif settings.menu_categoria_imagem_12|length > 0 and cont_sub_menu == 12 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_12, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 13 and settings.menu_categoria_produto_13|length > 0 %}
+
+                               <div class="categoria-produto menu-categoria-product-13"></div>
+
+                            {% elseif settings.menu_categoria_imagem_13|length > 0 and cont_sub_menu == 13 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_13, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 14 and settings.menu_categoria_produto_14|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-14"></div>
+
+                            {% elseif settings.menu_categoria_imagem_14|length > 0 and cont_sub_menu == 14 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_14, 'titulo': category.name } %}
+                            {% endif %}
+
+                            {% if cont_sub_menu == 15 and settings.menu_categoria_produto_15|length > 0 %}
+
+                                <div class="categoria-produto menu-categoria-product-15"></div>
+
+                            {% elseif settings.menu_categoria_imagem_15|length > 0 and cont_sub_menu == 15 %}
+                                {% element 'snippets/imagem-submenu' { 'imagem': settings.menu_categoria_imagem_15, 'titulo': category.name } %}
+                            {% endif %}
+
+                        </div>
+
+                        {% set cont_sub_menu = cont_sub_menu + 1 %}
+
+                    {% endif %} 
+                    
+                </li>
+            {% endfor %}
+
+            {% if more_categories %}
+                <li class="first-level sub">
+
+                    <span role="button" title="Departamentos">
+                        <div class="name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" style="margin-bottom: -4px;" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                            </svg> 
+                            {% if settings.menu_texto_mais_categorias|length > 0 %}
+                                {{ settings.menu_texto_mais_categorias }}
+                            {% else %}
+                                + Categorias
+                            {% endif %}
+                        </div>
+                    </span>
+
+                    <div class="sub-list second-level">
+
+                        <ul>                    
+                            {% for category in more_categories %}                            
+                            <li>                                
+                                <a href="{{ category.link }}" title="{{ category.name }}">{{ category.name }}</a>
+                            </li>
+                            
+                            {% if category.children and settings.exibir_subs_vermais %}
+                            <ul class="sub-list third-level">
+                                {% for level3 in category.children %}
+                                <li class="third-more-categories">
+                                    <a href="{{ level3.link }}" title="{{ level3.name }}">{{ level3.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                            {% endfor %} 
+                        </ul> 
+
+                    </div>
+                                       
+                </li>
+            {% endif %}
+
+            {% element 'snippets/menu-paginas-extras' {'posicao': 2, 'icones_menu': icones_menu, 'contador_menu': contador_menu} %}
+
+        </ul>
+    </div>
+</nav>

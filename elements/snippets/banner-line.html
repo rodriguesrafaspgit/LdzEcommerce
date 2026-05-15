@@ -1,0 +1,15 @@
+{% set banner = banners[banner_id] %}
+{% set mobile = mobile | default(false) %}
+
+{% if banner %}
+    <div class="container">
+        <div class="banner-line {% if mobile %} mobile {% else %} desk {% endif %}">
+
+            {% element 'snippets/banner' {
+                image    : banner,
+                padding  : true
+            } %}
+
+        </div>
+    </div>
+{% endif %}

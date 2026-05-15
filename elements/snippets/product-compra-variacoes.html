@@ -1,0 +1,468 @@
+{% set qtde_variacoes = 0 %}
+{% set nomeVariacao = '' %}
+{% set nomeSegundaVariacao = '' %}
+{% set variacao = product.Variants|length ? product.Variants : product.variants %}
+{% set descBusiness = '' %}
+{% set activeBus = false %}
+{% set priceVarBus = '' %}
+
+{% for item in variacao %}
+    {% if item.id|length > 0 %}
+        {% set qtde_variacoes = qtde_variacoes + 1 %}
+    {% endif %}
+    {% if item.Sku[0].type|length > 0 and nomeVariacao|length == '' %}
+        {% set nomeVariacao = item.Sku[0].type %}
+    {% endif %}
+    {% if item.Sku[1].type|length > 0 and nomeSegundaVariacao|length == '' %}
+        {% set nomeSegundaVariacao = item.Sku[1].type %}
+    {% endif %}
+{% endfor %}
+
+
+{% if settings.modelo_de_negocio == '1' %}
+    {% set priceNotBusiness = product.current_price %}
+    {% set priceBusiness = product.price %}
+
+    {% set descBusiness = (100 - (priceBusiness / priceNotBusiness) * 100) %}
+    {% set activeBus = true %}
+{% endif %}
+
+<div class="config-variacoes-compra {{ settings.trocar_preco_compra_direta ? 'trocar-preco' : '' }} {{ qtde_variacoes > 0 ? 'com-variacao' : '' }} {% if settings.listagem_exibir_variacoes_aberta == '1'%}d-product{%else%}f-product{%endif%}">
+    
+    <input type="hidden" name="action" value="{{ links.cart_add ~ product.id }}">
+    <input type="hidden" name="product_id" value="{{ product.id }}">
+
+    {% if qtde_variacoes > 0 %}
+        <input type="hidden" name="variacao" id="selectedVariant" value="">
+        <input type="hidden" name="estoque" value="">
+    {% else %}
+        <input type="hidden" name="estoque" value="{{ product.stock }}">
+    {% endif %}
+
+    {% if qtde_variacoes > 0 %}
+        <button title="close" type="button" class="btn-close-variants">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"></path>
+            </svg>
+        </button>
+
+        {% set values = { 0 : 'x' } %}
+        {% set key = 0 %}
+        {% set val = 'x' %}
+        {% set arrayCores = [] %}
+
+
+        <ul class="paleta-cores" style="display: none;">
+
+            {% if nomeVariacao|length > 0 and nomeVariacao|lower == 'cor' %}
+                <span class="variant-name">{{ nomeVariacao|capitalize }}</span>
+            {% elseif nomeSegundaVariacao|lower == 'cor' %}
+                <span class="variant-name">{{ nomeSegundaVariacao|capitalize }}</span>
+            {% endif %}
+
+            {% for variants in product %}
+
+                {% for sku in variants %}
+
+                    {% if sku.stock != 0 %}
+
+                        {% for itens in sku %}
+                            
+                            {% for item in itens %}
+
+                                {% set existe = false %}
+
+                                {% if item.image_secure and item.value != val %}
+                                    
+                                    {% for value in values %}
+                                        {% for cor in value %}
+                                            {% if cor == item.value %}
+                                                {% set existe = true %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                    
+                                    {% if existe == false %}
+                                        {% set arrayCores = arrayCores|merge([{'order':sku.order, 'title': item.value, 'codVari': sku.id, 'estoque': sku.stock, 'img': item.image_secure}]) %}
+
+                                        {% set val = item.value %}
+                                        {% set values = values|merge([{ key: val }]) %}
+                                        {% set key = key + 1 %}
+                                        {% set existe = false %}
+
+                                    {% endif %}
+
+                                {% elseif (not item.image_secure) and item.value != val %}
+                                    {% if item.type|lower == 'cor' %}
+                                        {% for value in values %}
+                                            {% for cor in value %}
+                                                {% if cor == item.value %}
+                                                    {% set existe = true %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                        
+                                        {% if existe == false %}
+
+
+                                            {% set arrayCores = arrayCores|merge([{'order':sku.order, 'title': item.value, 'codVari': sku.id, 'estoque': sku.stock, 'img': ''}]) %}
+    
+                                            {% set val = item.value %}
+                                            {% set values = values|merge([{ key: val }]) %}
+                                            {% set key = key + 1 %}
+                                            {% set existe = false %}
+    
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+
+                            {% endfor %}
+
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endfor %}
+
+            {% endfor %}
+
+
+            {% for color in arrayCores|sort %}
+                {% if color.img|length > 0 %}
+                    <li class="paleta-cores-item" id="{{ color.codVari }}" estoque="{{ color.estoque }}">
+                        <img src="{{ color.img }}" title="{{ color.title }}">
+                    </li>                   
+                {% else %}
+                    <li class="paleta-cores-item cor-sem-imagem" id="{{ color.codVari }}" estoque="{{ color.estoque }}">
+                        <div title="{{ color.title }}">{{ color.title }}</div>
+                    </li>                     
+                {% endif %}                   
+            {% endfor %}
+
+        </ul>
+        <!-- Fim Paleta de Cores -->
+
+        {% set cont_var_tamanhos = 0 %}
+
+        {% for variants in product %}
+            {% for sku in variants %}
+                {% if sku.stock != 0 %}
+                    
+                    {# Variacao dupla #}
+                    {% if sku.Sku|length == 2 %} 
+
+                        {% set itens = sku.Sku %}
+
+                        {% if itens[0].type|lower == 'cor' or itens[1].type|lower == 'cor' %}
+
+                            {% for itens in sku.Sku %}
+                                {% if itens.type|lower != 'cor' %}
+                                    {% set cont_var_tamanhos = cont_var_tamanhos + 1 %}
+                                {% endif %}
+                            {% endfor %}
+
+                        {% else %}
+                            
+                            {% if itens[0].type|lower != 'cor' %}
+                                {% set cont_var_tamanhos = cont_var_tamanhos + 1 %}
+                            {% endif %}
+
+                        {% endif %}
+
+                    {# Variacao simples #}
+                    {% else %}
+
+                        {% for itens in sku.Sku %}
+                            {% if itens.type|lower != 'cor' %}
+                                {% set cont_var_tamanhos = cont_var_tamanhos + 1 %}
+                            {% endif %}
+                        {% endfor %}
+
+                    {% endif %}
+
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+
+        {% if cont_var_tamanhos > 0 %}
+
+            <div class="itens-tamanho">
+                {% if nomeSegundaVariacao|length > 0 and nomeSegundaVariacao|lower != 'cor' %}
+                    <span class="variant-name">{{ nomeSegundaVariacao|capitalize }}</span>
+                {% elseif nomeVariacao|lower != 'cor' %}
+                    <span class="variant-name">{{ nomeVariacao|capitalize }}</span>
+                {% endif %}
+
+                <select class="select-tamanho" title="Campo Tamanho">
+
+                    <option disabled="disabled" selected="selected">
+                        Selecione
+                    </option>  
+    
+                    {% set arrayTamanho = [] %}
+    
+                    {% for variants in product %}
+                        {% for sku in variants %}
+                            {% if sku.stock != 0 %}
+    
+                                {#Criando um array para ordernar#}
+    
+                                {% if sku.Sku|length == 2 %}
+    
+                                    {% set itens = sku.Sku %}
+
+                                    {%if activeBus and descBusiness != 0 %}
+                                        {% set priceVarBus = (sku.price * descBusiness) / 100 %}       
+                                    {%endif%}
+
+                                    
+                                    {% if itens[0].type|lower == 'tamanho' %}
+
+                                        {% if itens[0].value matches '/^[0-9]+$/' %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'value': itens[0].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[0].type, 'price':priceVarBus| currency}]) %}
+                                        {% else %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'order': sku.order, 'value': itens[0].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[0].type, 'price':priceVarBus| currency}]) %}
+                                        {% endif %}
+    
+                                    {% elseif itens[1].type|lower == 'tamanho' %}
+
+                                        {% if itens[1].value matches '/^[0-9]+$/' %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'value': itens[1].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[1].type,'price':priceVarBus| currency}]) %}
+                                        {% else %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'order': sku.order, 'value': itens[1].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[1].type, 'price':priceVarBus| currency}]) %}
+                                        {% endif %}
+                                    {% else %}
+
+                                        {% if itens[1].value matches '/^[0-9]+$/' %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'value': itens[1].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[1].type,'price':priceVarBus| currency}]) %}
+                                        {% else %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'order': sku.order, 'value': itens[0].value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens[0].type,'price':priceVarBus| currency}]) %}
+                                        {% endif %}
+                                    {% endif %}
+    
+                                {% else %}
+
+                                    {% set itens = sku.Sku %}
+                                    {% for itens in sku.Sku %}
+
+                                        {%if activeBus and descBusiness != 0 %}
+                                            {% set priceVarBus = (sku.price * descBusiness) / 100 %}       
+                                        {%endif%}
+
+                                        {% if itens.value matches '/^[0-9]+$/' %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{ 'value': itens.value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens.type, 'price':priceVarBus| currency }]) %}
+                                        {% else %}
+                                            {% set arrayTamanho = arrayTamanho|merge([{'order': sku.order, 'value': itens.value, 'codVari': sku.id, 'estoque': sku.stock, 'type': itens.type, 'price':priceVarBus| currency}]) %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+    
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+    
+                    {#gera as opcoes apos ordenar#}
+                    {% for item in arrayTamanho|sort %}
+                        <option value="{{ item.codVari }}" estoque="{{ item.estoque }}" {%if activeBus and descBusiness != 0 %}price="{{item.price}}"{%endif%}>{{ item.value }}</option>
+                    {% endfor %}
+    
+                </select>
+            </div>
+
+        {% endif %}
+        
+        {% set img = 'x' %}
+        <select class="select-cor" style="display: none;" title="Campo Cor">
+            {% for variants in product %}
+                {% for sku in variants %}
+                    {% if sku.stock != 0 %}
+                        {% for itens in sku %}
+                            {% for item in itens %}
+                                {% if item.type|lower == 'cor' %}
+                                    {% if sku.stock != 0 %}
+                                        {% if sku.url.http|length > 0 %}
+                                            {% set img = sku.url.http %}
+                                        {% else %}
+                                            {% set img = sku.url.https %}
+                                        {% endif %}
+                                    {% endif %}
+                                    
+                                    
+                                    <option title="{{ item.value }}" value="{{ sku.id }}" data-original="{{ img }}">{{ item.value }}</option>
+
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </select>
+
+    {% endif %}
+
+    <div class="alerta-variacao">Por favor, selecione uma variação.</div>
+    <div class="alerta-estoque"></div>
+    <div class="alerta-adicionado"></div>
+    
+    <div class="acao-compra">
+        
+        <div class="quantidade-box">
+            <div class="quantidade-box-input">
+                <input id="quantidade" name="quantidade" class="text numeric" value="1" maxlength="4" title="Campo Quantidade" data-estoque="{{ product.stock }}" />
+            </div>
+            <div class="quantidade-box-controles">
+                <div class="quantidade-box-controles-itens" data-item="mais">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -4px;" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                </div>
+                <div class="quantidade-box-controles-itens" data-item="menus">
+                    <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: -4px;" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        {% set url_add_produto = (qtde_variacoes == 0) ? '' : links.cart_add %}
+
+        <input type="hidden" name="url-add-card" value="{{ links.cart_add ~ product.id }}">
+
+        <button type="button" class="btn-comprar-listagem btn-comprar product-button" title="Botão Comprar">
+
+                {% if utils.is_mobile %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '0' or settings.listagem_produtos_icone_botao_comprar_mobile|length == 0 %}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-plus" viewBox="0 0 16 16">
+                            <path d="M9 5.5a.5.5 0 0 0-1 0V7H6.5a.5.5 0 0 0 0 1H8v1.5a.5.5 0 0 0 1 0V8h1.5a.5.5 0 0 0 0-1H9V5.5z"/>
+                            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zm3.915 10L3.102 4h10.796l-1.313 7h-8.17zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '1' %}
+                        <!-- Diamante -->
+                        <svg style="margin-top: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                            <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '2' %}
+                        <!-- Carrinho -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '3' %}
+                        <!-- Olho -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '4' %}
+                        <!-- Coracao -->
+                        <svg style="margin-top: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '5' %}
+                        <!-- Cesta de Compras -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                            <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                        </svg>
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar_mobile == '6' %}
+                        <!-- Bolsa de Compras -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                    {% endif %}
+
+                    <span class="text-buy">
+                         
+                        {% if settings.listagem_produtos_texto_botao_comprar %}
+                            {{ settings.listagem_produtos_texto_botao_comprar }}
+                        {% else %}
+                            Comprar Agora!
+                        {% endif %}
+                    </span>
+
+                {% else %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '1' %}
+                        <!-- Diamante -->
+                        <svg style="margin-top: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                            <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '2' %}
+                        <!-- Carrinho -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '3' %}
+                        <!-- Olho -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '4' %}
+                        <!-- Coracao -->
+                        <svg style="margin-top: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '5' %}
+                        <!-- Cesta de Compras -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                            <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_icone_botao_comprar == '6' %}
+                        <!-- Bolsa de Compras -->
+                        <svg style="margin-top: -4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                            <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                        </svg>
+                         
+                    {% endif %}
+
+                    {% if settings.listagem_produtos_texto_botao_comprar %}
+                        {{ settings.listagem_produtos_texto_botao_comprar }}
+                    {% else %}
+                        Comprar Agora!
+                    {% endif %}
+
+                {% endif %}
+
+            </button>
+        <!-- </form> -->
+
+    </div>
+
+</div>
+
+{% if settings.listagem_exibir_variacoes_aberta == '0' %}
+    {% if qtde_variacoes > 0 %}
+        <div class="choose-variants">
+            <button type="button" class="btn-choose-variants">
+                Escolher
+            </button>        
+        </div>
+    {% endif %}
+{% endif %}

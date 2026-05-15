@@ -1,0 +1,52 @@
+{% set produtos_vitrine = settings.promocao_destaque_produtos|split(',') %}
+
+{% set quantidade_produtos = (produtos_vitrine|length > 4) ? 4 : produtos_vitrine|length %}
+
+{% set banner_promocao_destaque = (settings.banner_promocao_destaque|length > 0 and not utils.is_mobile) ? asset(settings.banner_promocao_destaque) : '' %}
+
+{% if produtos_vitrine|length > 0 %}
+    <div id="promocao-destaque" class="section-showcase promocao-destaque" style="background-image: url({{ banner_promocao_destaque }} );" data-quantidade-produtos="{{ quantidade_produtos }}">
+
+        <div class="container promocao-destaque-corpo">
+
+            {% if settings.promocao_destaque_titulo|length > 0 %}
+
+                <div class="promocao-destaque-conteudo">
+
+                    <div class="promocao-destaque-conteudo-item">
+
+                        <h2>
+                            {{ settings.promocao_destaque_titulo }}
+                        </h2>
+    
+                        {% if settings.promocao_destaque_descricao|length > 0 %}
+                            <p>
+                                {{ settings.promocao_destaque_descricao }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+                    
+                </div>
+
+            {% endif %}
+
+            <div class="promocao-destaque-corpo-produtos">
+
+                <div class="swiper flexslider-promocao-destaque" id="promocao-destaque">
+                    <div class="swiper-container">
+                        <div class="swiper-wrapper">
+                            
+                        </div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+{% endif %}

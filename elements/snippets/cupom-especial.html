@@ -1,0 +1,81 @@
+{%
+    if settings.cupom_especial_ambiente == '0' 
+    or (settings.cupom_especial_ambiente == '1' and not utils.is_mobile) 
+    or (settings.cupom_especial_ambiente == '2' and utils.is_mobile)    
+%}
+
+    {% if settings.tamanho_fonte_contagem_cupom > 0 %}
+    <style>
+        .cupom-especial .timer-promocao-item-tempo strong{
+            {% if settings.tamanho_fonte_contagem_cupom == 1 %}
+                font-size: 20px !important;
+            {% else %}
+                font-size: 16px !important;
+            {% endif %}
+        }
+    </style>
+    {% endif %}
+
+    <div class="cupom-especial">
+
+        <div class="container">
+            
+            <div class="cupom-especial-container">
+
+                {% if settings.cupom_exibir_timer == '1' %}
+                    <div class="cupom-especial-timer">
+                        <div class="cupom-especial-timer-box" data-inicial="{{ settings.cupom_data_inicial }}" data-final="{{ settings.cupom_data_final }}"></div>
+                    </div>
+                {% endif %}
+
+                <div class="cupom-especial-conteudo">
+
+                    {% if settings.cupom_link|length > 0 %}
+                        <a href="{{ settings.cupom_link }}">
+                    {% endif %}
+
+                    {% if settings.cupom_titulo|length > 0 %}
+                        <h4 class="cupom-especial-titulo" {% if settings.tamanho_fonte_titulo_cupom > 0 %} style="{% if settings.tamanho_fonte_titulo_cupom == 1 %}font-size: 20px !important;{% else %}font-size: 16px !important;{% endif %}"{% endif %}>
+                            {{ settings.cupom_titulo }}
+                        </h4>
+                    {% endif %}
+
+                    {% if settings.cupom_link|length > 0 %}
+                        </a>
+                    {% endif %}
+
+                    {% if settings.cupom_descricao|length > 0 %}
+                        <div class="cupom-especial-descricao">
+                            {{ settings.cupom_descricao }}
+                        </div>
+                    {% endif %}
+                    
+                </div>
+
+                {% if settings.cupom_codigo|length > 0 %}
+                    <div class="cupom-especial-cupom">
+
+                        <div class="cupom-especial-codigo">
+                            {{ settings.cupom_codigo }}
+                        </div>
+                        
+                        {% if settings.cupom_link|length > 0 and settings.cupom_link_frase|length > 0 %}
+                            <a href="{{ settings.cupom_link }}" class="cupom-especial-link">
+                                {{ settings.cupom_link_frase }}
+                                <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -2px;" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </a>
+                        {% endif %}
+
+                    </div>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endif %}

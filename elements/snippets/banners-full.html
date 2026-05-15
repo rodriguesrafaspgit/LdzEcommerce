@@ -1,0 +1,308 @@
+{% set slideConfigs = {
+    'stopOnHover' : (settings.banner_home_stop_hover ? true : false),
+    'timer'       : 10000,
+    'isMobile'    : utils.is_mobile,
+    'navigation': true
+} %}
+
+{% if not utils.is_mobile %}
+
+    <div class="banner-home swiper" data-settings="{{ slideConfigs | json_encode() | escape }}">
+
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {% if settings.full_banner_desktop_1 %}
+                    <div class="swiper-slide item">
+
+                        {% if settings.full_banner_desktop_1_link|length > 0 and full_banner_desktop_1_produto|length == 0 %}
+                            <a href="{{ settings.full_banner_desktop_1_link }}">
+                        {% endif %}
+
+                            {% if settings.full_banner_desktop_1_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-1" data-produto="{{ settings.full_banner_desktop_1_produto }}" data-div=".full-banner-product-1"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_1) }}" class="swiper-lazy" alt="Full Banner 1">
+
+                        {% if settings.full_banner_desktop_1_link|length > 0 and full_banner_desktop_1_produto|length == 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_desktop_2 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_desktop_2_link|length > 0 %}
+                            <a href="{{ settings.full_banner_desktop_2_link }}">
+                        {% endif %}
+
+                            {% if settings.full_banner_desktop_2_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-2" data-produto="{{ settings.full_banner_desktop_2_produto }}" data-div=".full-banner-product-2"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_2) }}" class="swiper-lazy" alt="Full Banner 2">
+                        
+                        {% if settings.full_banner_desktop_2_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_desktop_3 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_desktop_3_link|length > 0 %}
+                            <a href="{{ settings.full_banner_desktop_3_link }}">
+                        {% endif %}
+                        
+                            {% if settings.full_banner_desktop_3_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-3" data-produto="{{ settings.full_banner_desktop_3_produto }}" data-div=".full-banner-product-3"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_3) }}" class="swiper-lazy" alt="Full Banner 3">
+                        
+                        {% if settings.full_banner_desktop_3_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_desktop_4 %}
+                    <div class="swiper-slide item">
+
+                        {% if settings.full_banner_desktop_4_link|length > 0 and full_banner_desktop_4_produto|length == 0 %}
+                            <a href="{{ settings.full_banner_desktop_4_link }}">
+                        {% endif %}
+
+                            {% if settings.full_banner_desktop_4_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-4" data-produto="{{ settings.full_banner_desktop_4_produto }}" data-div=".full-banner-product-4"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_4) }}" class="swiper-lazy" alt="Full Banner 4">
+
+                        {% if settings.full_banner_desktop_4_link|length > 0 and full_banner_desktop_4_produto|length == 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_desktop_5 %}
+                    <div class="swiper-slide item">
+
+                        {% if settings.full_banner_desktop_5_link|length > 0 and full_banner_desktop_5_produto|length == 0 %}
+                            <a href="{{ settings.full_banner_desktop_5_link }}">
+                        {% endif %}
+
+                            {% if settings.full_banner_desktop_5_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-5" data-produto="{{ settings.full_banner_desktop_5_produto }}" data-div=".full-banner-product-5"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_5) }}" class="swiper-lazy" alt="Full Banner 5">
+
+                        {% if settings.full_banner_desktop_5_link|length > 0 and full_banner_desktop_5_produto|length == 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_desktop_6 %}
+                    <div class="swiper-slide item">
+
+                        {% if settings.full_banner_desktop_6_link|length > 0 and full_banner_desktop_6_produto|length == 0 %}
+                            <a href="{{ settings.full_banner_desktop_6_link }}">
+                        {% endif %}
+
+                            {% if settings.full_banner_desktop_6_produto|length > 0 %}
+                                <div class="container">
+                                    <div class="full-banner-product">
+                                        <div class="produto-perfil-ajax full-banner-product-6" data-produto="{{ settings.full_banner_desktop_6_produto }}" data-div=".full-banner-product-6"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <img loading="lazy" src="{{ asset(settings.full_banner_desktop_6) }}" class="swiper-lazy" alt="Full Banner 6">
+
+                        {% if settings.full_banner_desktop_6_link|length > 0 and full_banner_desktop_6_produto|length == 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if settings.full_banner_desktop_1 or settings.full_banner_desktop_2 or settings.full_banner_desktop_3 or settings.full_banner_desktop_4 or settings.full_banner_desktop_5 or settings.full_banner_desktop_6 %}
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            {% endif %}
+
+            {% if settings.banner_slide_exibir_dots == '1'%}
+                <div class="dots">
+                    {% if settings.full_banner_desktop_1 %}
+                        <div class="dot dot-active"></div>
+                    {% endif %}
+                    {% if settings.full_banner_desktop_2 %}
+                        <div class="dot"></div>
+                    {% endif %}
+                    {% if settings.full_banner_desktop_3 %}
+                        <div class="dot"></div>
+                    {% endif %}
+                    {% if settings.full_banner_desktop_4 %}
+                        <div class="dot"></div>
+                    {% endif %}
+                    {% if settings.full_banner_desktop_5 %}
+                        <div class="dot"></div>
+                    {% endif %}
+                    {% if settings.full_banner_desktop_6 %}
+                        <div class="dot"></div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endif %}
+
+{% if utils.is_mobile %}
+
+    <div class="banner-home" data-settings="{{ slideConfigs | json_encode() | escape }}">
+
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {% if settings.full_banner_mobile_1 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_1_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_1_link }}">
+                        {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.full_banner_mobile_1) }}" class="swiper-lazy" alt="Full Banner 1">
+                        {% if settings.full_banner_mobile_1_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_mobile_2 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_2_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_2_link }}">
+                        {% endif %}
+                            <img loading="lazy" src="{{ asset(settings.full_banner_mobile_2) }}" class="swiper-lazy" alt="Full Banner 2">
+                        {% if settings.full_banner_mobile_2_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_mobile_3 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_3_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_3_link }}">
+                        {% endif %}
+                        <img loading="lazy" src="{{ asset(settings.full_banner_mobile_3) }}" class="swiper-lazy" alt="Full Banner 3">
+                        {% if settings.full_banner_mobile_3_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_mobile_4 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_4_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_4_link }}">
+                        {% endif %}
+                        <img loading="lazy" src="{{ asset(settings.full_banner_mobile_4) }}" class="swiper-lazy" alt="Full Banner 4">
+                        {% if settings.full_banner_mobile_4_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_mobile_5 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_5_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_5_link }}">
+                        {% endif %}
+                        <img loading="lazy" src="{{ asset(settings.full_banner_mobile_5) }}" class="swiper-lazy" alt="Full Banner 5">
+                        {% if settings.full_banner_mobile_5_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if settings.full_banner_mobile_6 %}
+                    <div class="swiper-slide item">
+                        {% if settings.full_banner_mobile_6_link|length > 0 %}
+                            <a href="{{ settings.full_banner_mobile_6_link }}">
+                        {% endif %}
+                        <img loading="lazy" src="{{ asset(settings.full_banner_mobile_6) }}" class="swiper-lazy" alt="Full Banner 6">
+                        {% if settings.full_banner_mobile_6_link|length > 0 %}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            {% if settings.full_banner_mobile_1 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+
+            {% if settings.full_banner_mobile_2 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+
+            {% if settings.full_banner_mobile_3 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+            
+            {% if settings.full_banner_mobile_4 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+            
+            {% if settings.full_banner_mobile_5 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+            
+            {% if settings.full_banner_mobile_6 %}
+                {% set numbanners = numbanners + 1 %}
+            {% endif %}
+
+            {% if numbanners > 1 %}
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            {% endif %}
+
+            <div class="dots">
+                {% if settings.full_banner_mobile_1 %}
+                    <div class="dot dot-active"></div>
+                {% endif %}
+                {% if settings.full_banner_mobile_2 %}
+                    <div class="dot"></div>
+                {% endif %}
+                {% if settings.full_banner_mobile_3 %}
+                    <div class="dot"></div>
+                {% endif %}
+                {% if settings.full_banner_mobile_4 %}
+                    <div class="dot"></div>
+                {% endif %}
+                {% if settings.full_banner_mobile_5 %}
+                    <div class="dot"></div>
+                {% endif %}
+                {% if settings.full_banner_mobile_6 %}
+                    <div class="dot"></div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+{% endif %}

@@ -1,0 +1,142 @@
+{% set extensionJs = minified ? '.min.js' : '.js' %}
+{% set extensionCss = minified ? '.min.css' : '.css' %}
+{{ tray.scripts }}
+
+{% if 'product' in pages.current %}
+<script src="{{ asset('js/zoom.min.js') }}"></script>
+{% endif %}
+
+{% if 'depoimentos' in pages.current %}
+<script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+{% endif %}
+
+{# Theme Scripts #}
+<script>
+    window.theme = {
+        {% set tpath = asset('/') | split('?') %}
+    {% set tpath = tpath[ 0 ] %}
+    version: '{{ tpath }}'
+    }
+</script>
+
+{% if (utils.is_mobile and settings.habilitar_modo_turbo_mobile == '1' or not utils.is_mobile and settings.habilitar_modo_turbo_desktop == '1') and pages.current == 'home' %}
+
+<script>
+    function loadScript(src) {
+        return new Promise(function (resolve, reject) {
+            if ($("script[src='" + src + "']")?.length === 0) {
+                var script = document.createElement('script');
+                script.onload = function () {
+                    resolve();
+                };
+                script.onerror = function () {
+                    reject();
+                };
+                script.src = src;
+                document.body.appendChild(script);
+            } else if (!$("script[src='" + src + "']")) {
+                var script = document.createElement('script');
+                script.onload = function () {
+                    resolve();
+                };
+                script.onerror = function () {
+                    reject();
+                };
+                script.src = src;
+                document.body.appendChild(script);
+            } else {
+                resolve();
+            }
+        });
+    };
+
+    function loadStyle(src) {
+        return new Promise(function (resolve, reject) {
+            if ($("link[href='" + src + "']")?.length === 0) {
+                var style = document.createElement('link');
+                style.type = 'text/css';
+                style.rel = 'stylesheet';
+                style.media = 'screen';
+                style.onload = function () {
+                    resolve();
+                };
+                style.onerror = function () {
+                    reject();
+                };
+                style.href = src;
+                document.querySelector("head").appendChild(style);
+            } else if (!$("link[href='" + src + "']")) {
+                var style = document.createElement('link');
+                style.type = 'text/css';
+                style.rel = 'stylesheet';
+                style.media = 'screen';
+                style.onload = function () {
+                    resolve();
+                };
+                style.onerror = function () {
+                    reject();
+                };
+                style.href = src;
+                document.querySelector("head").appendChild(style);
+            } else {
+                resolve();
+            }
+        });
+    };
+    const exibir_newsletter_popup = '{{ settings.exibir_newsletter_popup }}';
+
+    window.addEventListener('load', function () {
+        setTimeout(async () => {
+            await loadScript("{{ asset('js/lazyload.min.js') }}");
+            await loadScript("{{ asset('js/swiper.min.js') }}");
+            await loadScript("{{ asset('js/flexslider.js') }}");
+            await loadScript("{{ asset('js/jquery.mask.min.js') }}");
+            await loadScript("{{ asset('js/js.cookie.min.js') }}");
+            await loadScript("{{ asset('js/lite-yt-embed.js') }}");
+            await loadStyle("{{ asset('css/lite-yt-embed.css') }}");
+
+            if (exibir_newsletter_popup == '1') {
+                await loadStyle("{{ asset('css/newsletter-popup.min.css') }}");
+                await loadScript("{{ asset('js/vue.min.js') }}");
+                await loadScript("{{ asset('js/newsletter-popup.min.js') }}");
+            };
+            await loadStyle("{{ asset('css/swiper.min.css') }}");
+            await loadStyle("{{ asset('css/style' ~ extensionCss) }}");
+            await loadStyle("{{ asset('css/devrocket' ~ extensionCss) }}");
+            await loadScript("{{ asset('js/main' ~ extensionJs) }}");
+            await loadScript("{{ asset('js/cart' ~ extensionJs) }}");
+            await loadScript("{{ tray.paths.js ~ 'dist/application.min.js?' ~ utils.assets_version }}").then(() => {
+                vitrineScript();
+                document.querySelector('body').removeAttribute('style');
+                window.scrollTo(0, 0);
+                document.getElementById('loadOtimization').remove()
+            });
+
+        }, 2000);
+    });
+</script>
+
+{% if settings.exibir_newsletter_popup == '1' %}
+    {% element 'snippets/newsletter-popup' %}
+{% endif %}
+
+{% else %}
+
+<script src="{{ asset('js/lazyload.min.js')    }}"></script>
+<script src="{{ asset('js/swiper.min.js')      }}"></script>
+<script src="{{ asset('js/flexslider.js')      }}"></script>
+<script src="{{ asset('js/lite-yt-embed.js')   }}"></script>
+<script src="{{ asset('js/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('js/js.cookie.min.js')   }}"></script>
+<script src="{{ asset('js/main' ~ extensionJs) }}"></script>
+<script src="{{ asset('js/cart' ~ extensionJs) }}"></script>
+<script src="{{ tray.paths.js ~ 'dist/application.min.js?' ~ utils.assets_version }}"></script>
+
+{% if settings.exibir_newsletter_popup == '1' %}
+{% element 'snippets/newsletter-popup' %}
+<link rel="stylesheet" href="{{ asset('css/newsletter-popup.min.css') }}" type="text/css">
+<script src="{{ asset('js/vue.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/newsletter-popup.min.js') }}"></script>
+{% endif %}
+
+{% endif %}

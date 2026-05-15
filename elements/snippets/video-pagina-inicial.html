@@ -1,0 +1,27 @@
+{%
+    if settings.video_pagina_inicial_ambiente == '0' 
+    or (settings.video_pagina_inicial_ambiente == '1' and not utils.is_mobile) 
+    or (settings.video_pagina_inicial_ambiente == '2' and utils.is_mobile)    
+%}
+
+    <div class="section section-video-pagina-inicial">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="title-section">
+                    {% if settings.video_pagina_inicial_titulo|length > 0 %}
+                        {{ settings.video_pagina_inicial_titulo }}
+                    {% else %}
+                        Confira nosso Vídeo
+                    {% endif %}
+                </h2>
+            </div>
+            
+            {% if settings.video_pagina_inicial_link|length > 0 %}
+            {% set link_video = settings.video_pagina_inicial_link|replace({'https://www.youtube.com/watch?v=' : ''}) %}
+                <lite-youtube videoid="{{ link_video }}" playlabel="Play" style="width: 100%;height: 100%;margin: 0 auto;"></lite-youtube>
+            {% endif %}
+
+        </div>
+    </div>
+
+{% endif %}

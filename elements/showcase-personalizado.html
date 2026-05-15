@@ -1,0 +1,97 @@
+{% set produtos_vitrine = settings.vitrine_personalizada_produtos|split(',') %}
+
+{% if not utils.is_mobile %}
+    {% set quantidade_produtos = (settings.banner_vitrine_personalizada|length > 0) ? 2 : 4 %}
+{% else %}
+    {% set quantidade_produtos = 1 %}
+{% endif %}
+
+{% if produtos_vitrine | length > 0 or settings.vitrine_personalizada_categoria %}
+    <div style="padding: 2rem 0; background-color: var(--vitrine_cor_fundo)">
+        <div id="vitrine-personalizada" class="section-showcase vitrine-personalizada" data-quantidade-produtos="{{ quantidade_produtos }}">
+            <div class="container produtos-content">
+    
+                {% if settings.vitrine_personalizada_titulo|length > 0 %}
+                    <div class="section-header">
+    
+                        <div class="vitrine-personalizada-titulo">
+    
+                            <h2 class="title-section">
+                                {{ settings.vitrine_personalizada_titulo }}
+                            </h2>
+        
+                            {% if settings.vitrine_personalizada_descricao|length > 0 %}
+                                <p>
+                                    {{ settings.vitrine_personalizada_descricao }}
+                                </p>
+                            {% endif %}
+    
+                        </div>
+    
+                        {% if settings.exibir_timer_vitrine_personalizada == '1' %}
+                            <div class="vitrine-personalizada-timer-promocao" data-inicial="{{ settings.vitrine_personalizada_data_inicial }}" data-final="{{ settings.vitrine_personalizada_data_final }}"></div>
+                        {% endif %}
+    
+                    </div>
+                {% endif %}
+    
+                {% if settings.banner_vitrine_personalizada|length > 0 and not utils.is_mobile or settings.banner_vitrine_personalizada_mobile|length > 0 and utils.is_mobile %}
+    
+                    <div class="vitrine-personalizada-corpo">
+    
+                        <div class="vitrine-personalizada-corpo-produtos">
+    
+                            <div class="swiper flexslider-produtos">
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+                                        
+                                    </div>
+                                    <div class="swiper-button-prev"></div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+    
+                        </div>
+    
+                        {% if utils.is_mobile %}
+                            <div class="vitrine-personalizada-corpo-banner">
+                                {% if settings.vitrine_personalizada_link_banner|length > 0 %}
+                                    <a href="{{ settings.vitrine_personalizada_link_banner }}">
+                                {% endif %}
+                                    <img loading="lazy" src="{{ asset(settings.banner_vitrine_personalizada) }}" class="w-100" alt="Vitrine Personalizada">
+                                {% if settings.vitrine_personalizada_link_banner|length > 0 %}
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            {% if settings.vitrine_personalizada_link_banner|length > 0 %}
+                                <a href="{{ settings.vitrine_personalizada_link_banner }}" style="display: contents;">
+                            {% endif %}
+                                <img class="vitrine-personalizada-corpo-banner" src= "{{ asset(settings.banner_vitrine_personalizada) }}">
+                            {% if settings.vitrine_personalizada_link_banner|length > 0 %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+    
+                    </div>
+    
+                {% else %}
+    
+                    <div class="swiper flexslider-produtos">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                
+                            </div>
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+    
+                {% endif %}
+    
+            </div>
+        </div>
+    </div>
+{% endif %}

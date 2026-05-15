@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-br" data-tray-theme="Girl - Fashion" data-tray-theme-version="1.38.8" data-files="{{ utils.assets_version }}" data-store="{{ store.id }}" class="page-{{ pages.current }}">
+    <head>
+
+        {% if settings.favicon|length > 0 %}
+            <link rel="icon" type="image/png" href="{{ asset(settings.favicon) }}" />
+        {% endif %}
+
+        {# Minified variable is used for helping development #}
+        {% set minified = true %}
+
+        {{ html.charset() }}
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport"              content="width=device-width, initial-scale=1">
+        <meta name="theme-color"           content="{{ settings.color_primary_medium }}">
+
+        {% element 'head-metas' %}
+        {% element 'css-variables' %}
+        {% element 'styles' { minified : minified } %}
+
+        {{ tray.analytics }}
+        {{ googleTagManager.header(pages.current, tagManagerData) }}
+
+    </head>
+
+    {% if settings.loja_manutencao_ativo == '1' %}
+
+        <body>
+
+            <div class="box-loja-manutencao">
+
+                <div class="container">
+
+                    {% if settings.loja_manutencao_logo %}
+                        <img src="{{ asset(settings.loja_manutencao_logo) }}" alt="Logo - Loja em Manutenção / Lançamento">
+                    {% endif %}
+
+                    {% if settings.loja_manutencao_titulo|length > 0 %}
+                        <h1 class="box-loja-manutencao-titulo">
+                            {{ settings.loja_manutencao_titulo }}
+                        </h1>
+                    {% endif %}
+
+                    {% if settings.loja_manutencao_descricao|length > 0 %}
+                        <div class="box-loja-manutencao-descricao">
+                            {{ settings.loja_manutencao_descricao }}
+                        </div>
+                    {% endif %}
+
+                    {% if settings.loja_manutencao_exibir_timer_inauguracao == '1' and settings.loja_manutencao_data_inauguracao|length > 0 %}
+                        <div class="box-box-loja-manutencao-timer-conteudo">
+                            <h3>Contagem Regressiva</h3>
+                            <div class="box-loja-manutencao-timer" data-final="{{ settings.loja_manutencao_data_inauguracao }}"></div>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% element 'scripts' { minified : minified } %}
+            
+        </body>
+
+    {% else %}
+
+            {% if (utils.is_mobile and settings.habilitar_modo_turbo_mobile == '1' or not utils.is_mobile and settings.habilitar_modo_turbo_desktop == '1') and pages.current == 'home' %}
+            <body style="overflow: hidden;">
+                <div id="loadOtimization">
+                    <style>
+                        #loadOtimization {
+                            width:100vw !important;
+                            height: 100vh !important;
+                            background-color: white !important;
+                            z-index: 999 !important;
+                            position: fixed !important;
+                            top: 0 !important;
+                            display: flex !important;
+                            align-items: center !important;
+                            justify-content: center !important;
+                            flex-direction: column !important;
+                        }
+                    </style>
+                    <img src="{{ asset('img/loading.gif') }}" alt="Loading" width="34" height="34">
+                </div>
+            {% else %}
+            <body>
+            {% endif %}
+
+            {{ googleTagManager.top(pages.current, tagManagerData) }}
+            {% element 'snippets/modals-theme' %}
+
+            <div class="overlay-shadow"></div>
+            <div class="application">
+                {% if settings.trocar_imagem_compra_direta %}
+                    <span class="trocar-imagem-compra-direta"></span>
+                {% endif %}
+
+                {% element 'snippets/menu-mobile' %}
+                {% element 'header' %}
+
+                <main class="site-main" data-business="{{ settings.modelo_de_negocio }}">
+                    {% if not ('home' in pages.current) %}
+                    <div class="page-content {{ pages.current in ['catalog', 'home', 'search'] ? ' not-padding' }}">
+                    {% endif %}
+
+                        {% if "central" in pages.current %}
+
+                            <div class="container">
+                                <div class="line-panel flex">
+                                    {%  element 'sidebar-central' %}
+                                    <div class="col-panel">
+                                        {{ content_for_layout }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% elseif 'home' in pages.current %}
+
+                            {{ content_for_layout }}
+
+                        {% else %}
+
+                            {% set special_pages = [
+                                'listas',
+                                'depoimentos-de-clientes',
+                                'noticias'
+                            ] %}
+
+                            {% set title = '' %}
+
+                            {% for page in pages.custom %}
+                                {% if ('empresa' in page.slug and pages.current == 'company') or (pages.current == page.slug and page.slug not in special_pages) %}
+                                    {% set title = page.name %}
+                                {% endif %}
+                            {% endfor %}
+
+                            <div class="container {% if title != '' %} is-custom-page {% endif %}">
+
+                                {% if title != '' %}
+                                    <div class="page-title">
+                                        <span class="text">
+                                            {{ title }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+
+                                {{ content_for_layout }}
+
+                            </div>
+
+                        {% endif %}
+                    {% if not pages.current == 'home' %}
+                    </div>
+                    {% endif %}
+                </main>
+
+                {% element 'footer' %}
+
+                {% if settings.show_whatsapp_button %}
+                    {% element 'snippets/whatsapp' { 'local': 'floating' } %}
+                {% endif %}
+
+            </div>
+            <div>
+                {% element 'snippets/messages' %}
+            </div>
+            
+            {% element 'snippets/pageview' %}
+            {% element 'snippets/modal' %}
+
+            {% element 'scripts' { minified : minified } %}
+        
+            {{ store.chat }}
+            {{ googleTagManager.bottom(pages.current, tagManagerData) }}
+        
+        </body>
+    
+    {% endif %}
+    
+    {% element 'script-vitrine' { minified : minified } %}
+
+    {% element 'snippets/modal-tabela-medidas' %}
+
+</html>

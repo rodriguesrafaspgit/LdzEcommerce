@@ -1,0 +1,47 @@
+{% if settings.produto_exibir_indicacao == '1' or settings.produto_exibir_duvida_continuar_compr == '1'  %}
+    <div class="produto-links">
+
+        {% if settings.produto_exibir_indicacao == '1' %}
+
+            <div class="produto-link-item produto-indique-amigo">
+                <a href="{{ product.url.https }}" data-url="{{ links.product_recommend }}{{ product.id }}" data-title="{{ product.name }}" class="botao_indique_amigo" data-toggle="modal" data-target="#modal-form" data-modal-width="600px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-bottom: -2px;" fill="currentColor" class="bi bi-arrow-up-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                    </svg> 
+                    Indique a um amigo
+                </a>
+            </div>
+        {% endif %}
+
+
+        {% if settings.produto_exibir_duvida_continuar_compr == '1'  %}
+            <div class="produto-link-item produto-duvidas">
+                <a href="{{ product.url.https }}" data-url="{{ links.product_question }}{{ product.id }}" data-title="{{ product.name }}" class="botao_tire_duvidas" data-toggle="modal" data-target="#modal-form" data-modal-width="600px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-bottom: -2px;" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                    </svg> 
+                    Tire suas Dúvidas
+                </a>
+            </div>
+
+            <!-- <div class="produto-link-item comparar" id="comparar">
+                <a href="{{ product.url.https }}" rel="nofollow" id="productToCompareLink" data-url="{{ config.links.product_compare }}" data-product-id="{{ product.id }}" data-category-id="{{ product.category_id }}">
+                    <input type="checkbox" id="compareProduct" name="compare[]"> Comparar Produto
+                </a>
+            </div> -->
+            
+            {% set url_categoria = product.slug|split('/') %}
+
+            <div class="produto-link-item produto-continuar-comprando">
+                <a href="{{ url_categoria[0] }}" class="botao_continuar_comprando">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-bottom: -2px;" fill="currentColor" class="bi bi-arrow-up-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1H3.707l10.147 10.146a.5.5 0 0 1-.708.708L3 3.707V8.5a.5.5 0 0 1-1 0v-6z"/>
+                    </svg> 
+                    Continuar comprando
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+{% endif %}

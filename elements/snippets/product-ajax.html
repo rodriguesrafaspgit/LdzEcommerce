@@ -1,0 +1,355 @@
+{% set hover_class = product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request ? 'show-down' : '' %}
+{% set no_variation = (product.has_variation !='1') ? 'no-var' : 'has-var' %}
+
+
+{% set class_sem_variacao = settings.listagem_produtos_exibir_variacoes_produto != '1' ? 'product-simples' : '' %}
+
+<div class="product {{ class_sem_variacao }} {{no_variation}} {% if settings.ativar_redimensionamento_slides_produtos == '1' %}redimensionar{% endif %} {% if settings.ativar_redimensionamento_slides_produtos == '2' %}redimensionard{% endif %}" {{ product.data_tray_ga4 }}>
+
+    <div class="product-header">
+
+        <div class="w-100">
+
+            {% element 'snippets/product-tags' { 'product': product } %}
+
+            <div class="image">
+    
+                {% if settings.listagem_modo_visualizacao == '2' %}
+                <a href="{{ product.link }}" class="space-image space-image-vertical">
+                    <img loading="lazy" class="{% if product.images[0].full %} imagem-produto-1 {% endif %} {% if not product.images[1].full %}imagem-unica{% endif %}" src="{{ product.images[0].full }}" data-src="{{ product.images[0].full }}" alt="{{ product.name }}">
+                    {% if product.images[1].full %}
+                        <img loading="lazy" class="imagem-produto-2" src="{{ product.images[1].full }}" data-src="{{ product.images[1].full }}" alt="{{ product.name }}">
+                    {% endif %}
+                </a>
+                {% elseif settings.listagem_modo_visualizacao == '1' %}
+                <a href="{{ product.link }}" class="space-image">
+                    <img loading="lazy" class="{% if product.images[0].full %} imagem-produto-1 {% endif %} {% if not product.images[1].full %}imagem-unica{% endif %}" src="{{ product.images[0].full }}" data-src="{{ product.images[0].full }}" alt="{{ product.name }}">
+                    {% if product.images[1].full %}
+                        <img loading="lazy" class="imagem-produto-2" src="{{ product.images[1].full }}" data-src="{{ product.images[1].full }}" alt="{{ product.name }}">
+                    {% endif %}
+                </a>
+                {% elseif settings.listagem_modo_visualizacao == '3' %}
+                <a href="{{ product.link }}" class="space-image">
+                    <img loading="lazy" class="ajusteauto {% if product.images[0].full %} imagem-produto-1 {% endif %} {% if not product.images[1].full %}imagem-unica{% endif %}" src="{{ product.images[0].full }}" data-src="{{ product.images[0].full }}" alt="{{ product.name }}">
+                    {% if product.images[1].full %}
+                        <img loading="lazy" class="ajusteauto imagem-produto-2" src="{{ product.images[1].full }}" data-src="{{ product.images[1].full }}" alt="{{ product.name }}">
+                    {% endif %}
+                </a>
+                {% elseif settings.listagem_modo_visualizacao == '4' %}
+                <a href="{{ product.link }}" class="space-image space-image-vertical">
+                    <img loading="lazy" class="ajusteauto-2-3 {% if product.images[0].full %} imagem-produto-1 {% endif %} {% if not product.images[1].full %}imagem-unica{% endif %}" src="{{ product.images[0].full }}" data-src="{{ product.images[0].full }}" alt="{{ product.name }}">
+                    {% if product.images[1].full %}
+                        <img loading="lazy" class="ajusteauto-2-3 imagem-produto-2" src="{{ product.images[1].full }}" data-src="{{ product.images[1].full }}" alt="{{ product.name }}">
+                    {% endif %}
+                </a>
+                {% endif %}    
+            </div>
+
+            {% if settings.listagem_produtos_exibir_ver_produto == '1' %}
+
+                <div class="box-produto-ver-produto">
+                    <a href="{{ product.link }}">
+                        <div class="box-produto-ver-produto-link">
+                            Ver Produto
+                        </div>
+                    </a>
+                </div>
+
+            {% endif %}
+
+            {% if not resumo %}
+
+                {% if settings.listagem_produtos_exibir_botao_whatsapp == '1' and settings.exibir_whatsapp_numero and settings.listagem_whatsapp_fixo == '' %}
+                    {% set whatsapp_numero = settings.exibir_whatsapp_numero|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+                    
+                    {% if settings.comprar_somente_cliente_logado != '1' %}
+                        {% set current_price = product.price_offer > 0 ? product.price_offer : product.price %}
+                        {% set current_price = "e Valor: R$ " ~ current_price|currency %}
+                    {% else %}
+                        {% set current_price = '' %}
+                    {% endif %}
+    
+                    {% set whatsapp_frase = "Oi, tudo bem? Quero saber mais sobre o produto: #{product.name}, Link: #{product.link} " ~ current_price %}
+                    {% set whatsapp_frase = whatsapp_frase|convert_encoding('UTF-8', 'iso-8859-1') %}
+                    
+                    <div class="box-produto-whatsapp">
+                        <a href="https://api.whatsapp.com/send?phone=55{{whatsapp_numero}}&text={{whatsapp_frase|convert_encoding('UTF-8', 'ISO-8859-1')|url_encode}}" rel="noreferrer" target="_blank">
+                            <svg style="margin-bottom: -1px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                            </svg> 
+                            <span>
+                                {% if settings.listagem_produtos_exibir_botao_whatsapp_frase %}
+                                    {{ settings.listagem_produtos_exibir_botao_whatsapp_frase }}
+                                {% else %}
+                                    Saber Mais!
+                                {% endif %}
+                            </span>
+                        </a>
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="product-body">
+
+        <a class="product-info" href="{{ product.link }}">
+
+            <div class="product-info-dados">
+    
+                <div class="product-name">
+                    {{ product.name }}
+                </div>
+
+                {% if not resumo %}
+    
+                    {% if settings.listagem_produtos_exibir_timer_prodmocao == '1' %}
+                        {% if product.start_promotion != '0000-00-00' and product.end_promotion != '0000-00-00' %}
+                            <div class="listagem-produtos-timer-promocao" data-inicial="{{ product.start_promotion }}" data-final="{{ product.end_promotion }}"></div>
+                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
+
+                {% if settings.comprar_somente_cliente_logado != '1' %}
+                    <div class="product-price">
+                        {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+        
+                            {% element 'snippets/product-price' { 'product': product, 'resumo': resumo } %}
+        
+                        {% elseif product.upon_request %}
+        
+                            {% element 'snippets/product-message' { 'product_message': 'Sob consulta', 'know_more' : 'Saiba mais' } %}
+        
+                        {% elseif product.stock <= 0 %}
+        
+                            {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar' } %}
+        
+                        {% else %}
+        
+                            {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar'  } %}
+        
+                        {% endif %}
+                    </div>
+                {% else %}
+                <div class="product-price tray-hide" data-logged-user="true">
+                    {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+    
+                        {% element 'snippets/product-price' { 'product': product, 'resumo': resumo } %}
+    
+                    {% elseif product.upon_request %}
+    
+                        {% element 'snippets/product-message' { 'product_message': 'Sob consulta', 'know_more' : 'Saiba mais' } %}
+    
+                    {% elseif product.stock <= 0 %}
+    
+                        {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar' } %}
+    
+                    {% else %}
+    
+                        {% element 'snippets/product-message' {  'product_message': 'Esse acabou :(', 'know_more' : 'Avise-me quando chegar'  } %}
+    
+                    {% endif %}
+                </div>
+                {% endif %}
+
+            </div>
+    
+        </a>
+
+        {% if settings.comprar_somente_cliente_logado == '1' %}
+            <div class="autenticacao-comprar-produto tray-hide" data-logged-user="false">
+                <a href="{{ links.login }}">
+                    <div class="w-100">
+                        {% if settings.comprar_somente_cliente_logado_frase|length == 0 %}
+                            Para realizar a compra, por favor realize o Login
+                        {% else %}
+                            {{ settings.comprar_somente_cliente_logado_frase }}
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+
+            <div class="product-footer tray-hide" data-logged-user="true">
+
+                {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+
+                    <div class="w-100">
+
+                        {% if not resumo %}
+                            {% if settings.listagem_produtos_exibir_avaliacao_produto == '1' %}
+                                {% if settings.show_product_review %}
+                                    {% element 'snippets/rating-catalog' {
+                                        'product': product,
+                                        'review' : product.ranking,
+                                        'total'  : true
+                                    } %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                
+                        {% if pages.current == 'catalog' and settings.habilitar_comparador_produtos == '1' %}
+                            <div class="compare-buttons">
+                    
+                                <a href="{{ links.compare_delete ~ product.id }}" class="flex justify-center align-center {{ not product.compare ? 'compare-hidden' }}" data-compare="remove">
+                                    <span class="filter-checkbox checked"></span>
+                                    {{ Translation("remover_comparar") }}
+                                </a>
+                    
+                                <a href="{{ links.compare_add ~ product.id }}" class="flex justify-center align-center {{ product.compare ? 'compare-hidden' }}" data-compare="add">
+                                    <span class="filter-checkbox"></span>
+                                    {{ Translation("comparar_produto") }}
+                                </a>
+                    
+                            </div>
+                        {% endif %}
+
+                        {% 
+                            if 
+                                ( settings.listagem_produtos_exibir_variacoes_produto == '1' 
+                                and settings.listagem_produtos_exibir_botao_comprar == '1'
+                                and ( product.is_kit == '0' or product.is_kit == '' ) 
+                                and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desativar_compra_direta_mobile))) )
+                        %}
+                    
+                            {% element 'snippets/product-compra-variacoes' {'product': product} %}
+                    
+                        {% elseif 
+                            settings.listagem_produtos_exibir_variacoes_produto == '1'
+                            and settings.listagem_produtos_exibir_botao_comprar == '1'
+                            and product.is_kit == '1'
+                        %}
+        
+                            <div class="box-botao-comprar-kit">
+                                <div  class="btn-comprar-listagem" data-kit="1"> 
+                                    {% element 'snippets/botao-comprar' {'product': product} %}
+                                </div>
+                            </div>
+        
+                        {% else %}
+                    
+                            <div class="actions">
+                                {% element 'snippets/botao-comprar' {'product': product} %}
+                            </div>
+                    
+                        {% endif %}
+        
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% if settings.comprar_somente_cliente_logado != '1' %}
+
+    <div class="product-footer">
+
+        {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+
+            <div class="w-100">
+
+                {% if not resumo %}
+                    {% if settings.listagem_produtos_exibir_avaliacao_produto == '1' %}
+                        {% if settings.show_product_review %}
+                            {% element 'snippets/rating-catalog' {
+                                'product': product,
+                                'review' : product.ranking,
+                                'total'  : true
+                            } %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+        
+                {% if pages.current == 'catalog' and settings.habilitar_comparador_produtos == '1' %}
+                    <div class="compare-buttons">
+            
+                        <a href="{{ links.compare_delete ~ product.id }}" class="flex justify-center align-center {{ not product.compare ? 'compare-hidden' }}" data-compare="remove">
+                            <span class="filter-checkbox checked"></span>
+                            {{ Translation("remover_comparar") }}
+                        </a>
+            
+                        <a href="{{ links.compare_add ~ product.id }}" class="flex justify-center align-center {{ product.compare ? 'compare-hidden' }}" data-compare="add">
+                            <span class="filter-checkbox"></span>
+                            {{ Translation("comparar_produto") }}
+                        </a>
+            
+                    </div>
+                {% endif %}
+
+                {% 
+                    if 
+                        ( settings.listagem_produtos_exibir_variacoes_produto == '1' 
+                        and settings.listagem_produtos_exibir_botao_comprar == '1'
+                        and ( product.is_kit == '0' or product.is_kit == '' ) 
+                        and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desativar_compra_direta_mobile))) )
+                %}
+            
+                    {% element 'snippets/product-compra-variacoes-ajax' {'product': product} %}
+            
+                {% elseif 
+                    settings.listagem_produtos_exibir_variacoes_produto == '1'
+                    and settings.listagem_produtos_exibir_botao_comprar == '1'
+                    and product.is_kit == '1'
+                %}
+
+                    <div class="box-botao-comprar-kit">
+                        <div  class="btn-comprar-listagem" data-kit="1"> 
+                            {% element 'snippets/botao-comprar' {'product': product} %}
+                        </div>
+                    </div>
+
+                {% else %}
+            
+                    <div class="actions">
+                        {% element 'snippets/botao-comprar' {'product': product} %}
+                    </div>
+            
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+    
+    {% if settings.listagem_produtos_exibir_botao_whatsapp == '1' and settings.exibir_whatsapp_numero and settings.listagem_whatsapp_fixo == '1' %}
+        {% set whatsapp_numero = settings.exibir_whatsapp_numero|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+        
+        {% if settings.comprar_somente_cliente_logado != '1' %}
+            {% set current_price = product.price_offer > 0 ? product.price_offer : product.price %}
+            {% set current_price = "e Valor: R$ " ~ current_price|currency %}
+        {% else %}
+            {% set current_price = '' %}
+        {% endif %}
+
+        {% set whatsapp_frase = "Oi, tudo bem? Quero saber mais sobre o produto: #{product.name}, Link: #{product.link} " ~ current_price %}
+        {% set whatsapp_frase = whatsapp_frase|convert_encoding('UTF-8', 'iso-8859-1') %}
+        
+        <div class="box-produto-whatsapp-fixo {% if settings.listagem_produtos_exibir_avaliacao_produto == '1' %}has-review{% endif %}">
+            <a href="https://api.whatsapp.com/send?phone=55{{whatsapp_numero}}&text={{whatsapp_frase|convert_encoding('UTF-8', 'ISO-8859-1')|url_encode}}" rel="noreferrer" target="_blank">
+                <svg style="margin-right: 3px;" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                </svg> 
+                <span>
+                    {% if settings.listagem_produtos_exibir_botao_whatsapp_frase %}
+                        {{ settings.listagem_produtos_exibir_botao_whatsapp_frase }}
+                    {% else %}
+                        Saber Mais!
+                    {% endif %}
+                </span>
+            </a>
+        </div>
+
+    {% endif %}
+
+</div>

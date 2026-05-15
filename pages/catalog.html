@@ -1,0 +1,291 @@
+<div class="catalog-cols flex f-wrap catalogo-container">
+
+    {% element 'snippets/breadcrumb' %}
+    
+    {% if settings.cupom_exibir == '1' %}
+        {% if settings.cupom_paginas == '2' or settings.cupom_paginas == '4' %}
+            {% element 'snippets/cupom-especial' %}
+        {% endif %}
+    {% endif %}
+
+    {% if settings.show_filters_sidebar %}
+        <div id="sidebar-category" class="sidebar-category">
+
+            <div class="sidebar-mobile-header">
+                <div class="close-box close-overlay">
+                    <i class="icon icon-times"></i>
+                </div>
+                <div class="block-title flex align-center">
+                    <i class="icon icon-filter"></i>
+                    Filtros
+                </div>
+            </div>
+
+            {% if filter_options %}
+                {% element 'smartfilter' %}
+            {% elseif filters %}
+                {% element 'filters' %}
+            {% endif %}
+
+            {#<!-- {% element 'smartfilter' %} -->#}
+
+        </div>
+    {% endif %}
+
+    <div class="col-content">
+
+        <div class="catalog-header">
+
+            {% if banner.title %}
+                <div class="banner">
+                    
+                    {% if banners.title.type == "javascript" %}
+
+                        <div class="slide-catalog swiper-container">
+                            <div class="swiper-wrapper">
+                                {% for banner in banners.title.slides %}
+                                    <div class="item swiper-slide">
+
+                                        {% if banner.link %}
+                                            <a href="{{ banner.link }}" {% if banner.target == '_blank' %} target="_blank" rel="noopener noreferrer" {% endif %}>
+                                                <img loading="lazy" class="swiper-lazy" src="{{ banner.image }}" alt="{{ banner.label }}" />
+                                            </a>
+                                        {% else %}
+                                            <img loading="lazy" class="swiper-lazy" src="{{ banner.image }}" alt="{{ banner.label }}" />
+                                        {% endif %}
+
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="dots"></div>
+                        </div>
+
+                    {% else %}
+
+                        {% set link = banners.title.link ? banners.title.tracked_link : null %}
+                        {% if link %}
+                            <a href="{{ link }}" {% if banners.title.target == '_blank' %} target="_blank" rel="noopener noreferrer" {% endif %}>
+                                <img src="{{ banners.title.src }}" alt="{{ banners.title.label }}" />
+                            </a>
+                        {% else %}
+                            <img src="{{ banners.title.src }}" alt="{{ banners.title.label }}" />
+                        {% endif %}
+
+                    {% endif %}
+
+                </div>
+            {% endif %}
+
+            {% if not utils.is_mobile %}
+
+                <div class="catalog-info flex justify-between align-center">
+
+                    <h1 class="catalog-name">
+                        {{ category.name }}
+                    </h1>
+
+                    {% if products | length > 0 %}
+                                    
+
+                        <div class="button-filter-mobile" data-toggle="overlay-shadow" data-target="#sidebar-category">
+                            <i class="icon icon-filter"></i>
+                            Filtrar
+                        </div>
+
+                        <div class="system-filter flex justify-center align-center {% if settings.compare %} compare-true {% endif %}">
+
+                            <div class="sort-mobile">
+                                <div class="sort-mobile-button" data-toggle="overlay-shadow" data-target="#sort-panel">
+                                    <i class="icon icon-sort"></i>
+                                    Ordenar
+                                </div>
+                                <div id="sort-panel" class="sort-panel">
+
+                                    <div class="close-box close-overlay">
+                                        <i class="icon icon-times"></i>
+                                    </div>
+
+                                    <div class="block-title flex align-center">
+                                        <i class="icon icon-sort"></i>
+                                        Ordenar Produtos
+                                    </div>
+
+                                    <ul class="sort-options"></ul>
+
+                                </div>
+                            </div>
+
+                            {% element 'snippets/filter' %}
+
+                            <div class="box-filtros-lista">
+                                <div class="box-filtro-lista-item active" data-tipo="">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-grid-3x3" viewBox="0 0 16 16">
+                                        <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13zM1.5 1a.5.5 0 0 0-.5.5V5h4V1H1.5zM5 6H1v4h4V6zm1 4h4V6H6v4zm-1 1H1v3.5a.5.5 0 0 0 .5.5H5v-4zm1 0v4h4v-4H6zm5 0v4h3.5a.5.5 0 0 0 .5-.5V11h-4zm0-1h4V6h-4v4zm0-5h4V1.5a.5.5 0 0 0-.5-.5H11v4zm-1 0V1H6v4h4z"/>
+                                    </svg>
+                                </div>
+                                <div class="box-filtro-lista-item" data-tipo="produtos-lista">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                    </svg>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {% if settings.habilitar_comparador_produtos == '1' %}
+                            <div class="compare-wrapper">
+                                <a href="/loja/comparador.php?loja={{store.id}}&IdDep={{category.id}}" class="button-compare">
+                                    {{ Translation("comparar_produto") }}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                        
+
+                    {% endif %}
+
+                </div>
+            
+            {% else %}
+
+                <div class="catalog-info {% if category.name|length <= 10 %} flex justify-between align-center {% endif %}">
+
+                    <h1 class="catalog-name {% if category.name|length > 10 %} text-left-1 {% endif %}">
+                        {{ category.name }}
+                    </h1>
+
+                    {% if products | length > 0 %}
+                    
+                        {% if category.name|length > 10 %}
+                            <div class='flex justify-between mt-1 order-2'> 
+                        {% endif %}
+
+
+                            <div class="button-filter-mobile" data-toggle="overlay-shadow" data-target="#sidebar-category">
+                                <i class="icon icon-filter"></i>
+                                Filtrar
+                            </div>
+
+                            <div class="system-filter flex justify-center align-center {% if settings.compare %} compare-true {% endif %}">
+
+                                <div class="sort-mobile">
+                                    <div class="sort-mobile-button" data-toggle="overlay-shadow" data-target="#sort-panel">
+                                        <i class="icon icon-sort"></i>
+                                        Ordenar
+                                    </div>
+                                    <div id="sort-panel" class="sort-panel">
+
+                                        <div class="close-box close-overlay">
+                                            <i class="icon icon-times"></i>
+                                        </div>
+
+                                        <div class="block-title flex align-center">
+                                            <i class="icon icon-sort"></i>
+                                            Ordenar Produtos
+                                        </div>
+
+                                        <ul class="sort-options"></ul>
+
+                                    </div>
+                                </div>
+
+                                {% element 'snippets/filter' %}
+
+                                <div class="box-filtros-lista">
+                                    <div class="box-filtro-lista-item active" data-tipo="">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-grid-3x3" viewBox="0 0 16 16">
+                                            <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0h13A1.5 1.5 0 0 1 16 1.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 14.5v-13zM1.5 1a.5.5 0 0 0-.5.5V5h4V1H1.5zM5 6H1v4h4V6zm1 4h4V6H6v4zm-1 1H1v3.5a.5.5 0 0 0 .5.5H5v-4zm1 0v4h4v-4H6zm5 0v4h3.5a.5.5 0 0 0 .5-.5V11h-4zm0-1h4V6h-4v4zm0-5h4V1.5a.5.5 0 0 0-.5-.5H11v4zm-1 0V1H6v4h4z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="box-filtro-lista-item" data-tipo="produtos-lista">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {% if settings.habilitar_comparador_produtos == '1' %}
+                                <div class="compare-wrapper">
+                                    <a href="/loja/comparador.php?loja={{store.id}}&IdDep={{category.id}}" class="button-compare">
+                                        {{ Translation("comparar_produto") }}
+                                    </a>
+                                </div>
+                            {% endif %}
+
+                        {% endif %}
+                    
+                    {% if category.name|length > 10 %}
+                        </div> 
+                    {% endif %}                    
+
+                </div>
+
+            {% endif %}
+
+            {% if category.small_description %}
+                <div class="description">
+                    <div class="board_htm">
+                        {{ category.small_description }}
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+
+        {% if products | length > 0 %}
+
+            <div class="catalog-content">
+                {% element 'showcase-catalog' {
+                    "products": products
+                } %}
+            </div>
+
+            {% if paginate.params.pageCount > 1 %}
+                <div class="catalog-footer flex justify-between align-center">
+                    <div class="results">
+                        Resultado: {{ paginate.params.count }} produto(s) em {{ paginate.params.pageCount }} página(s)
+                    </div>
+                    {% element 'snippets/pagination' %}
+                </div>
+            {% endif %}
+
+        {% else %}
+
+            <div class="catalog-empty">
+                {{ Translation('nenhum_resultado') }} :(
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<style>
+    /* correcao da colunas Tray */
+    @media (min-width: 768px) {
+        {% if settings.listagem_product_column and settings.listagem_product_column == 4 %}
+        .catalog-cols .sidebar-category + 
+        .col-content .showcase-catalog .list-product:not(.produtos-lista) .item {
+            width: 25% !important;
+        }
+        {% elseif settings.listagem_product_column and settings.listagem_product_column == 3 %}
+        .catalog-cols .sidebar-category + 
+        .col-content .showcase-catalog .list-product:not(.produtos-lista) .item {
+            width: 33% !important;
+        }
+        {% elseif settings.listagem_product_column and settings.listagem_product_column == 2 %}
+        .catalog-cols .sidebar-category + 
+        .col-content .showcase-catalog .list-product:not(.produtos-lista) .item {
+            width: 50% !important;
+        }
+        {% else %}
+        .catalog-cols .sidebar-category + 
+        .col-content .showcase-catalog .list-product:not(.produtos-lista) .item {
+            width: auto !important;
+        }
+        {% endif %}           
+}
+</style>

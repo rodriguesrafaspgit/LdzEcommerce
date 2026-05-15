@@ -1,0 +1,32 @@
+{% if settings.exibir_lgpd == '1' %}
+    <div class="box-lgpd">
+        <div class="container">
+            <div class="box-lgpd-itens">
+                <div class="item">
+                    {% if settings.lgpd_link|length > 0 %}
+                        <a href="{{ settings.lgpd_link }}" target="_blank">
+                    {% endif %}
+
+                    {% if settings.lgpd_texto_informativo|length > 0 %}
+                        {{ settings.lgpd_texto_informativo }}
+                    {% else %}
+                        Ao usar esta loja virtual, vocá aceita automaticamente o uso de cookies.
+                    {% endif %}
+
+                    {% if settings.lgpd_link|length > 0 %}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="item">
+                    <button type="button" class="btn aceitar-lgpd">
+                        {% if settings.lgpd_texto_botao|length > 0 %}
+                            {{ settings.lgpd_texto_botao }}
+                        {% else %}
+                            Aceitar e Fechar
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

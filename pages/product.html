@@ -1,0 +1,904 @@
+{% set showZoom = 'zoom-on' in productHelper.gallery %}
+
+{% if ProgressiveDiscounts %}
+    <div class="progressive-discount-banners">
+        {% for discount in ProgressiveDiscounts %}
+            {% if discount.banner %}
+                <img src="{{ discount.banner }}" alt="{{ discount.name }}"/>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% element 'snippets/breadcrumb' %}
+
+{% if settings.cupom_exibir == '1' %}
+    {% if settings.cupom_paginas == '3' or settings.cupom_paginas == '4' %}
+        <div class="catalogo-container">
+            {% element 'snippets/cupom-especial' %}
+        </div>
+    {% endif %}
+{% endif %}
+
+{% element 'schema' { 'product' : product } %}
+
+<div id="product-wrapper" class="product-wrapper">
+
+    <div class="product-box">
+        
+        {% set discount = product.price_offer > 0 ? (100 - (product.price_offer / product.price) * 100) : false %}
+        
+        <div class="product-gallery{{ showZoom ? ' zoom-true' }}">
+          
+            <div class="product-images swiper-container">
+
+                {% if discount %}
+                    <div class="tag-discount">
+                        {{ discount | number_format }}% OFF
+                    </div>
+                {% endif %}
+
+                {% if product.free_shipping == '1' or product.new == '1' or product.featured == '1' %}
+
+                    <div class="tags-product">
+
+                        {% if settings.icone_tag_lancamento %}
+                        {% set icone_lancamento_personalizado = true %}
+                        {% endif %}
+
+                        {% if settings.icone_tag_destaque %}
+                        {% set icone_destaque_personalizado = true %}
+                        {% endif %}
+
+                        {% if product.free_shipping == '1' %}
+                            <div class="tag-product" style="background-color: var(--cor_fundo_selo_frete_gratis); color: var(--cor_texto_selo_frete_gratis);">
+                                Frete Grátis
+                            </div>
+                        {% endif %}
+
+                        {% if product.new == '1' %}
+                            <div class="tag-product" style="background-color: var(--cor_fundo_selo_lancamento); color: var(--cor_texto_selo_lancamento);">
+                                {% if icone_lancamento_personalizado %}
+                                {% if settings.icone_tag_lancamento == "1" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "2" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-arrow-through-heart" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2.854 15.854A.5.5 0 0 1 2 15.5V14H.5a.5.5 0 0 1-.354-.854l1.5-1.5A.5.5 0 0 1 2 11.5h1.793l.53-.53c-.771-.802-1.328-1.58-1.704-2.32-.798-1.575-.775-2.996-.213-4.092C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2 12.147.854A.5.5 0 0 1 12.5 0h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845.562 1.096.585 2.517-.213 4.092-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182a21.86 21.86 0 0 1-2.685-2.062l-.539.54V14a.5.5 0 0 1-.146.354l-1.5 1.5Zm2.893-4.894A20.419 20.419 0 0 0 8 12.71c2.456-1.666 3.827-3.207 4.489-4.512.679-1.34.607-2.42.215-3.185-.817-1.595-3.087-2.054-4.346-.761L8 4.62l-.358-.368c-1.259-1.293-3.53-.834-4.346.761-.392.766-.464 1.845.215 3.185.323.636.815 1.33 1.519 2.065l1.866-1.867a.5.5 0 1 1 .708.708L5.747 10.96Z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "3" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-gift" viewBox="0 0 16 16">
+                                    <path d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1 5 0v.006c0 .07 0 .27-.038.494H15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2.038A2.968 2.968 0 0 1 3 2.506V2.5zm1.068.5H7v-.5a1.5 1.5 0 1 0-3 0c0 .085.002.274.045.43a.522.522 0 0 0 .023.07zM9 3h2.932a.56.56 0 0 0 .023-.07c.043-.156.045-.345.045-.43a1.5 1.5 0 0 0-3 0V3zM1 4v2h6V4H1zm8 0v2h6V4H9zm5 3H9v8h4.5a.5.5 0 0 0 .5-.5V7zm-7 8V7H2v7.5a.5.5 0 0 0 .5.5H7z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "4" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+                                    <path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"/>
+                                    <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "5" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "6" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_lancamento == "7" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-fire" viewBox="0 0 16 16">
+                                <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16Zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15Z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-trophy" viewBox="0 0 16 16">
+                                    <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935zM3.504 1c.007.517.026 1.006.056 1.469.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.501.501 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667.03-.463.049-.952.056-1.469H3.504z"></path>
+                                </svg>
+                                {% endif %}
+                                {% if settings.texto_selo_lancamentos %}{{ settings.texto_selo_lancamentos }}{% else %}Lançamento{% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if product.featured == '1' %}
+                            <div class="tag-product" style="background-color: var(--cor_fundo_selo_destaque); color: var(--cor_texto_selo_destaque);">
+                                {% if icone_destaque_personalizado %}
+                                {% if settings.icone_tag_destaque == "1" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "2" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-arrow-through-heart" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2.854 15.854A.5.5 0 0 1 2 15.5V14H.5a.5.5 0 0 1-.354-.854l1.5-1.5A.5.5 0 0 1 2 11.5h1.793l.53-.53c-.771-.802-1.328-1.58-1.704-2.32-.798-1.575-.775-2.996-.213-4.092C3.426 2.565 6.18 1.809 8 3.233c1.25-.98 2.944-.928 4.212-.152L13.292 2 12.147.854A.5.5 0 0 1 12.5 0h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.854.354L14 2.707l-1.006 1.006c.236.248.44.531.6.845.562 1.096.585 2.517-.213 4.092-.793 1.563-2.395 3.288-5.105 5.08L8 13.912l-.276-.182a21.86 21.86 0 0 1-2.685-2.062l-.539.54V14a.5.5 0 0 1-.146.354l-1.5 1.5Zm2.893-4.894A20.419 20.419 0 0 0 8 12.71c2.456-1.666 3.827-3.207 4.489-4.512.679-1.34.607-2.42.215-3.185-.817-1.595-3.087-2.054-4.346-.761L8 4.62l-.358-.368c-1.259-1.293-3.53-.834-4.346.761-.392.766-.464 1.845.215 3.185.323.636.815 1.33 1.519 2.065l1.866-1.867a.5.5 0 1 1 .708.708L5.747 10.96Z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "3" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-gift" viewBox="0 0 16 16">
+                                    <path d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1 5 0v.006c0 .07 0 .27-.038.494H15a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 1 14.5V7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h2.038A2.968 2.968 0 0 1 3 2.506V2.5zm1.068.5H7v-.5a1.5 1.5 0 1 0-3 0c0 .085.002.274.045.43a.522.522 0 0 0 .023.07zM9 3h2.932a.56.56 0 0 0 .023-.07c.043-.156.045-.345.045-.43a1.5 1.5 0 0 0-3 0V3zM1 4v2h6V4H1zm8 0v2h6V4H9zm5 3H9v8h4.5a.5.5 0 0 0 .5-.5V7zm-7 8V7H2v7.5a.5.5 0 0 0 .5.5H7z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "4" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-tags" viewBox="0 0 16 16">
+                                    <path d="M3 2v4.586l7 7L14.586 9l-7-7H3zM2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2z"/>
+                                    <path d="M5.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM1 7.086a1 1 0 0 0 .293.707L8.75 15.25l-.043.043a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 0 7.586V3a1 1 0 0 1 1-1v5.086z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "5" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "6" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-emoji-smile" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"/>
+                                </svg>
+                                {% endif %}
+
+                                {% if settings.icone_tag_destaque == "7" %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-fire" viewBox="0 0 16 16">
+                                <path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16Zm0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15Z"/>
+                                </svg>
+                                {% endif %}
+                                {% else %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="currentColor" class="bi bi-star" viewBox="0 0 16 16">
+                                    <path d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z"/>
+                                </svg>
+                                {% endif %}
+                                {% if settings.texto_selo_destaques %}{{ settings.texto_selo_destaques }}{% else %}Destaque{% endif %}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+                <div class="swiper-wrapper">
+                    {% for images in product.images %}
+                        <div class="image swiper-slide {% if loop.first -%} active {%- endif %}" data-index="{{ loop.index }}">
+                            <div class="zoom" style="position: relative; overflow: hidden;">
+                                <img loading="lazy" class="swiper-lazy" src="{{ images.full }}" alt="{{ product.name }}">
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+            <ul class="product-thumbs swiper-carousel {% if product.images | length > 4 %} show-arrows {% endif %}">
+                <div class="thumbs-list swiper-container hide-dots-desk ">
+                    <div class="swiper-wrapper">
+
+                        {% if product.images | length > 1 %}
+                            {% for images in product.images %}
+                                <li class="swiper-slide {% if loop.first -%} active {%- endif %}" data-index="{{ loop.index }}">
+                                    <div class="thumb">
+                                        <img loading="lazy" src="{{ images.medium }}" alt="{{ product.name }}">
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if product.video %}
+                            <li class="swiper-slide">
+                                {% set video = product.video|replace({ 'watch?v=': 'embed/' }) %}
+                                <div class="product-video" data-url="{{ video }}" aria-label="Ver Vídeo">
+                                    <i class="icon icon-youtube"></i>
+                                    <span class="text">Ver Vídeo</span>
+                                </div>
+                            </li>
+                        {% endif %}
+
+                    </div>
+                    <div class="dots"></div>
+                </div>
+                <div class="controls">
+                    <div class="prev">
+                        <i class="icon icon-arrow-left"></i>
+                    </div>
+                    <div class="next">
+                        <i class="icon icon-arrow-right"></i>
+                    </div>
+                </div>
+
+            </ul>
+
+            {% element 'snippets/product-links' { 'product' : product } %}
+
+        </div>
+
+        <div class="{% if settings.produto_alinhamento_conteudo == '1' %} product-left {% endif %} product-form">
+
+            <div class="product-loader loader">
+                <div class="spinner">
+                    <div class="double-bounce-one"></div>
+                    <div class="double-bounce-two"></div>
+                </div>
+                <div class="message">Atualizando informações ...</div>
+            </div>
+
+            {% set firstProgressiveDiscount = ProgressiveDiscounts | first %}
+
+            {% if product.featured or product.free_shipping or product.new or discount or extra_tag or firstProgressiveDiscount or product.additional_button %}
+                <div class="product-tags">
+                    {% set replaceTags = {'src=': 'width="119" height="22" alt="Selo" src='} %}
+                    {% if product.featured and Image('featured') %}
+                        <div class="tag featured">
+                            {{ Image('featured') | replace(replaceTags)  }}
+                        </div>
+                    {% endif %}
+
+                    {% if product.free_shipping and Image('free_shipping') %}
+                        <div class="tag free-shipping">
+                            {{ Image('free_shipping') | replace(replaceTags) }}
+                        </div>
+                    {% endif %}
+
+                    {% if product.new and Image('new') %}
+                        <div class="tag new">
+                           {{ Image('new') | replace(replaceTags) }} 
+                        </div>
+                    {% endif %}
+
+                    {% if product.additional_button and Image('additional_button') %}
+                        <div class="tag extra">
+                            {{ Image('additional_button') | replace(replaceTags) }}
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% endif %}
+
+            <h1 class="product-name">
+                {{ product.name }}
+            </h1>
+
+            {% if settings.exibir_adicionar_favoritos == '1' %}
+
+                <div class="product-main-info adicionar-favoritos">
+
+                    <a href="/minha-lista" class="btn-wishlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-bottom: -2px;" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg> 
+                        Adicionar aos Favoritos
+                    </a>
+
+                    <div style="display: none;" id="box-product-wishlist">{{ product.wishlist }}</div>
+
+                </div>
+
+            {% endif %}
+
+            {% if (product.reference and settings.show_reference) or (settings.show_product_brand and product.brand) or product.model %}
+                <div class="product-main-info">
+
+                    {% if product.reference and settings.show_reference %}
+                        <div class="product-sku">
+                            Ref: <span class="product-sku ref" id="product-reference" data-url="/mvc/store/product/variant_reference/?loja={{ store.id }}">{{ product.reference }}</span>
+                        </div>
+                    {% endif %}
+
+                    {% if settings.show_product_brand and product.brand %}
+                        <div class="product-brand">
+                            Marca: {{ product.brand }}
+                        </div>
+                    {% endif %}
+                    {% if product.model %}
+                        <div class="product-brand">
+                            Modelo: {{ product.model }}
+                        </div>
+                    {% endif %}
+                    
+                    {#
+                    {% if not product.upon_request and product.available and productHelper.wishlist() %}
+                        <div class="wishlist" title="Adicionar aos favoritos">
+                            {{ productHelper.wishlist() }}
+                        </div>
+                    {% endif %}
+                    #}
+
+                </div>
+            {% endif %}
+
+            {% if settings.produtos_exibir_avaliacao_produto == '1' %}
+                {% if settings.show_product_review %}
+                    {% element 'snippets/rating' {
+                        'review': product.ranking,
+                        'total' : true
+                    } %}
+                {% endif %}
+            {% endif %}
+
+            {% if product.additional_message %}
+                <div class="product-additional-message">
+                    {{ product.additional_message }}
+                </div>
+            {% endif %}
+
+            {% element 'snippets/tabela-medidas' { 'category' : product.category_id, 'idproduct' : product.id } %}
+
+            {% if product.available and (product.stock > 0 or settings.without_stock_sale) and not product.upon_request %}
+
+                {% set form_classes = [] %}
+
+                {% if product.is_kit %}
+                    {% set form_classes = form_classes | merge(['is-kit']) %}
+                {% endif %}
+
+                {% if productHelper.gifts() %}
+                    {% set form_classes = form_classes | merge(['has-gift']) %}
+                {% endif %}
+
+                <form id="form_comprar" {% if form_classes | length > 0 %} class="{{ form_classes | join (' ') }}" {% endif %} method="post" data-app="product.buy-form" data-id="{{ product.id }}" action="{{ links.cart_add ~ product.id }}">
+
+                    {% set productDetails = productHelper.details() %}                    
+                    {% if 'class="dados-campo infoLancamento"' in productDetails %}
+                        <div class="product-info product-release-date">
+                            <span class="bold">Data de lançamento:</span> {{ product.release_date | date('d/m/Y') }}
+                        </div>
+                    {% endif %}
+
+                    {% if 'class="availability"' in productDetails %}
+                        <div class="product-info product-availability">
+                            <span class="bold">Disponibilidade:</span> {{ product.availability }}
+                        </div>
+                    {% endif %}
+
+                    {% if product.variants %}
+                        <div class="product-variants">
+
+                            <div class="tray-content">
+                                {{ productHelper.variants() }}
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    <div class="product-gifts">
+                        {{ productHelper.gifts() }}
+                    </div>
+
+                    {% if product.is_kit %}
+                        <div class="product-kit">
+
+                            <div class="tray-content">
+                                {{ productHelper.kit() }}
+                            </div>
+                            <div class="variant-error error-message" style="display: none">
+                                Por favor, selecione as variações antes de prosseguir.
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    {% if product.additional_information %}
+                        <div class="product-additional-fields">
+
+                            {{ product.additional_information }}
+                            <div class="additional-field-required error-message" style="display: none">
+                                Por favor, preencha os campos acima.
+                            </div>
+
+                        </div>
+                    {% endif %}
+
+                    {% if settings.comprar_somente_cliente_logado == '1' %}
+
+                    <div class="autenticacao-comprar-produto mt-2 tray-hide" data-logged-user="false">
+
+                        <a href="{{ links.login }}">
+                            <div class="w-100">
+                                {% if settings.comprar_somente_cliente_logado_frase|length == 0 %}
+                                    Para realizar a compra, por favor realize o Login
+                                {% else %}
+                                    {{ settings.comprar_somente_cliente_logado_frase }}
+                                {% endif %}
+                            </div>
+                        </a>
+
+                    </div>
+
+                        <div class="product-price product-price-tray tray-hide" data-logged-user="true">
+                            {{ productHelper.pricing() }}
+                        </div>
+
+                        {% if productHelper.banner() %}
+                            {% set batch_promotion = productHelper.banner() %}
+                            <div class="product-batch-promotion {% if 'img' not in batch_promotion %} text-promotion {% endif %} tray-hide" data-logged-user="true">
+                                {{ batch_promotion }}
+                            </div>
+                        {% endif %}
+
+                        {% if ProgressiveDiscounts %}
+                            <div class="product-progressive-discount tray-hide" data-logged-user="true">
+                                <div class="title">
+                                    Produto com desconto progressivo
+                                    <div class="tooltip">
+                                        <i class="icon icon-help"></i>
+                                        <div class="tooltip-content">
+                                            Somente o maior desconto será aplicado na finalização do pedido.
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="discounts">
+                                    {% for discount in ProgressiveDiscounts %}
+                                        <li class="discount" data-name="{{ discount.name }}">
+                                            {{ discount.description }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if productHelper.bonus() and 'idBonusVariacao' in productHelper.bonus() %}
+                            <div class="product-reward tray-hide" data-logged-user="true">
+                                {{ productHelper.bonus() }}
+                            </div>
+                        {% endif %}
+
+                        <div class="actions tray-hide" data-logged-user="true">
+                            <div class="tray-buy-button">
+
+                                <!-- {{ productHelper.form() }} -->
+                                <span id="span_erro_carrinho" class="blocoAlerta" style="display:none;">Selecione uma opção para variação do produto</span>
+                                
+                                <div class="estoque-insuficiente">Estoque insuficiente</div>
+
+                                <span id="product-form-box" data-url-form-disabled="/mvc/store/product/variant_form/?loja={{ product.store_id }}" class="passo2">
+
+                                    <div class="quantidade-box">
+                                        <div class="quantidade-box-input">
+    
+                                           <input id="quantidade" name="quant" class="text numeric" value="1" maxlength="4" title="Campo Quantidade" onkeyup="mascara(this,numeros,event);" />
+                                        </div>
+                                        <div class="quantidade-box-controles">
+                                            <div class="quantidade-box-controles-itens" data-item="mais">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -4px;" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="quantidade-box-controles-itens" data-item="menus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: -4px;" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div data-app="product.buy-button" id="bt_comprar" class="remove-bg" align="left">
+                                        {% set class_button = productHelper.form()|split('<button') %} 
+                                        {% set class_button = class_button[1]|split('>') %} 
+                                        {% set class_button = class_button[0] %}
+                                        <button {{ class_button }} estoque="{{ product.stock }}" id-produto="{{ product.id }}">
+                                            <span class="botao-commerce-img">
+
+                                                {% if settings.produto_icone_botao_comprar == '1' %}
+                                                    <!-- Diamante -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                                                        <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '2' %}
+                                                    <!-- Carrinho -->
+                                                    <svg style="margin-bottom: -1px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '3' %}
+                                                    <!-- Olho -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '4' %}
+                                                    <!-- Coracao -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '5' %}
+                                                    <!-- Cesta de Compras -->
+                                                    <svg style="margin-bottom: -1px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                                                        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '6' %}
+                                                    <!-- Bolsa de Compras -->
+                                                    <svg style="margin-bottom: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_texto_botao_comprar %}
+                                                    {{ settings.produto_texto_botao_comprar }}
+                                                {% else %}
+                                                    Comprar
+                                                {% endif %}
+                                            </span>
+                                        </button>
+                                        <div id="loading_btn" align="left" style="display:none">
+                                            <img src="https://images2.tcdn.com.br/commerce/assets/store/img/loading.gif">Calculando ...
+                                        </div>
+                                    </div>
+                                </span>
+                                {% if settings.produtos_exibir_quantidade_estoque %}
+                                <span class="box-estoque-variacao">Estoque: {{ product.stock }}</span>
+                                {% endif %}
+
+                            </div>
+                            <span class="message">
+                                * Aqui sua compra é 100% segura, compre com tranquilidade.
+                            </span>
+                        </div>
+
+                    {% else %}
+
+                        <div class="product-price product-price-tray">
+                            {{ productHelper.pricing() }}
+                        </div>
+
+                        {% if productHelper.banner() %}
+                            {% set batch_promotion = productHelper.banner() %}
+                            <div class="product-batch-promotion {% if 'img' not in batch_promotion %} text-promotion {% endif %}">
+                                {{ batch_promotion }}
+                            </div>
+                        {% endif %}
+
+                        {% if ProgressiveDiscounts %}
+                            <div class="product-progressive-discount">
+                                <div class="title">
+                                    Produto com desconto progressivo
+                                    <div class="tooltip">
+                                        <i class="icon icon-help"></i>
+                                        <div class="tooltip-content">
+                                            Somente o maior desconto será aplicado na finalização do pedido.
+                                        </div>
+                                    </div>
+                                </div>
+                                <ul class="discounts">
+                                    {% for discount in ProgressiveDiscounts %}
+                                        <li class="discount" data-name="{{ discount.name }}">
+                                            {{ discount.description }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if productHelper.bonus() and 'idBonusVariacao' in productHelper.bonus() %}
+                            <div class="product-reward">
+                                {{ productHelper.bonus() }}
+                            </div>
+                        {% endif %}
+
+                        <div class="actions">
+                            <div class="tray-buy-button">
+
+                                <!-- {{ productHelper.form() }} -->
+                                <span id="span_erro_carrinho" class="blocoAlerta" style="display:none;">Selecione uma opção para variação do produto</span>
+                                
+                                <div class="estoque-insuficiente">Estoque insuficiente</div>
+
+                                <span id="product-form-box" data-url-form-disabled="/mvc/store/product/variant_form/?loja={{ product.store_id }}" class="passo2">
+
+                                    <div class="quantidade-box">
+                                        <div class="quantidade-box-input">
+    
+                                           <input id="quantidade" name="quant" class="text numeric" value="1" maxlength="4" title="Campo Quantidade" onkeyup="mascara(this,numeros,event);" />
+                                        </div>
+                                        <div class="quantidade-box-controles">
+                                            <div class="quantidade-box-controles-itens" data-item="mais">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="margin-bottom: -4px;" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                                                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="quantidade-box-controles-itens" data-item="menus">
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="margin-top: -4px;" width="16" height="16" fill="currentColor" class="bi bi-dash" viewBox="0 0 16 16">
+                                                    <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div data-app="product.buy-button" id="bt_comprar" class="remove-bg" align="left">
+                                        {% set class_button = productHelper.form()|split('<button') %} 
+                                        {% set class_button = class_button[1]|split('>') %} 
+                                        {% set class_button = class_button[0] %}
+                                        <button {{ class_button }} estoque="{{ product.stock }}" id-produto="{{ product.id }}">
+                                            <span class="botao-commerce-img">
+
+                                                {% if settings.produto_icone_botao_comprar == '1' %}
+                                                    <!-- Diamante -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gem" viewBox="0 0 16 16">
+                                                        <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '2' %}
+                                                    <!-- Carrinho -->
+                                                    <svg style="margin-bottom: -1px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                                                        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '3' %}
+                                                    <!-- Olho -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                                                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '4' %}
+                                                    <!-- Coracao -->
+                                                    <svg style="margin-bottom: -3px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '5' %}
+                                                    <!-- Cesta de Compras -->
+                                                    <svg style="margin-bottom: -1px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-basket3" viewBox="0 0 16 16">
+                                                        <path d="M5.757 1.071a.5.5 0 0 1 .172.686L3.383 6h9.234L10.07 1.757a.5.5 0 1 1 .858-.514L13.783 6H15.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-1A.5.5 0 0 1 .5 6h1.717L5.07 1.243a.5.5 0 0 1 .686-.172zM3.394 15l-1.48-6h-.97l1.525 6.426a.75.75 0 0 0 .729.574h9.606a.75.75 0 0 0 .73-.574L15.056 9h-.972l-1.479 6h-9.21z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_icone_botao_comprar == '6' %}
+                                                    <!-- Bolsa de Compras -->
+                                                    <svg style="margin-bottom: -2px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag" viewBox="0 0 16 16">
+                                                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/>
+                                                    </svg> 
+                                                {% endif %}
+
+                                                {% if settings.produto_texto_botao_comprar %}
+                                                    {{ settings.produto_texto_botao_comprar }}
+                                                {% else %}
+                                                    Comprar
+                                                {% endif %}
+                                            </span>
+                                        </button>
+                                        <div id="loading_btn" align="left" style="display:none">
+                                            <img src="https://images2.tcdn.com.br/commerce/assets/store/img/loading.gif">Calculando ...
+                                        </div>
+                                    </div>
+                                </span>
+                                {% if settings.produtos_exibir_quantidade_estoque %}
+                                <span class="box-estoque-variacao"></span>
+                                {% endif %}
+
+                            </div>
+                            <span class="message">
+                                * Aqui sua compra é 100% segura, compre com tranquilidade.
+                            </span>
+                        </div>
+
+                    {% endif %}
+
+                </form>
+
+                {% if settings.produto_exibir_timer_prodmocao == '1' %}
+                    {% if product.start_promotion != '0000-00-00' and product.end_promotion != '0000-00-00' %}
+                        <div class="produto-timer-promocao" data-inicial="{{ product.start_promotion }}" data-final="{{ product.end_promotion }}"></div>
+                    {% endif %}
+                {% endif %}
+
+                {% if settings.produtos_exibir_botao_whatsapp == '1' %}
+
+                    {% set whatsapp_numero = settings.exibir_whatsapp_numero|replace({'(': '', ')' : '', '-' : '', ' ': ''}) %}
+            
+                    {% if settings.comprar_somente_cliente_logado != '1' %}
+                        {% set current_price = product.price_offer > 0 ? product.price_offer : product.price %}
+                        {% set current_price = "e Valor: R$ " ~ current_price|currency %}
+                    {% else %}
+                        {% set current_price = '' %}
+                    {% endif %}
+    
+                    {% set whatsapp_frase = "Oi, tudo bem? Quero saber mais sobre o produto: #{product.name}, Link: #{product.link} " ~ current_price %}
+                    {% set whatsapp_frase = whatsapp_frase|convert_encoding('UTF-8', 'iso-8859-1') %}
+                
+                    <div class="produto-whatspp">
+                        <a href="https://api.whatsapp.com/send?phone=55{{whatsapp_numero}}&text={{whatsapp_frase|convert_encoding('UTF-8', 'ISO-8859-1')|url_encode}}" rel="noreferrer" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" style="margin-bottom: -2px;" fill="currentColor" class="bi bi-whatsapp" viewBox="0 0 16 16">
+                                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
+                            </svg> 
+                            {{ settings.produto_exibir_botao_whatsapp_frase }}
+                        </a>
+                    </div>
+                {% endif %}
+
+                {% if productHelper.shipping() %}
+                    <div class="product-shipping">
+
+                        {{ productHelper.shipping() }}
+
+                        <span class="info">
+                            <i class="icon icon-truck"></i>
+                            Frete e prazo de entrega
+                        </span>
+
+                        <form class="shipping-form">
+                            <div class="form-input">
+                                <label for="zip" class="sr-only">CEP</label>
+                                <input type="tel" class="input zip-code-mask" id="zip" name="zip" minlength="9" maxlength="9" placeholder="Informe seu cep" required>
+                            </div>
+                            <button type="submit" class="submit-shipping">
+                                Calcular
+                            </button>
+                        </form>
+
+                        <div class="result"></div>
+
+                    </div>
+                {% endif %}
+
+                {% if productHelper.social() %}
+                    <div class="product-social-share">
+                        {{ productHelper.social() }}
+                    </div>
+                {% endif %}
+
+            {% else %}
+                {% if product.variants %}
+                    <div class="product-variants">
+
+                        <div class="tray-content">
+                            {{ productHelper.variants() }}
+                        </div>
+
+                    </div>
+                {% endif %}
+
+                {# This helper verify if product is available or not and generate the correct html #}
+                <div class="product-not-sale">
+                    {{ productHelper.pricing() }}
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    {% if productHelper.bundle() %}
+        <div class="section-buy-together compre-junto">
+            <div class="product-cross-sell">
+                {{ productHelper.bundle() }}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="product-tabs">
+        {% element 'snippets/product-tabs' { 'product' : product } %}
+    </div>
+
+</div>
+
+{% if product.related_products and settings.enable_related_products %}
+    <div class="section-product-related">
+        <div class="container">
+
+            <div class="section-header">
+                <h2 class="title-section">
+                    Produtos relacionados
+                </h2>
+            </div>
+            <div class="swiper-container hide-dots-desk">
+                <div class="list-product swiper-wrapper">
+
+                    {% for item in product.related_products %}
+                        <div class="item swiper-slide">
+                            {% element 'snippets/product' {
+                                'product' : item,
+                                'slide'   : true
+                            } %}
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <div class="prev">
+                    <i class="icon icon-arrow-left"></i>
+                </div>
+                <div class="next">
+                    <i class="icon icon-arrow-right"></i>
+                </div>
+                <div class="dots"></div>
+            </div>
+
+        </div>
+    </div>
+{% endif %}
+
+{% if settings.history_position %}
+
+    {% if settings.comprar_somente_cliente_logado == '1' %}
+    <style class="remove-logged">
+        .products-history .ValoresLista{
+            display: none !important;
+        }
+    </style>
+    {% endif %}
+
+    <div class="products-history">
+        <div class="container">
+
+            <div class="section-header">
+                <h2 class="title-section">
+                    Produtos visualizados
+                </h2>
+            </div>
+
+            <div class="products-history-wrapper">
+
+                <div class="history-loader loader">
+                    <div class="spinner">
+                        <div class="double-bounce-one"></div>
+                        <div class="double-bounce-two"></div>
+                    </div>
+                    Carregando ...
+                </div>
+
+                {% element 'snippets/history' {
+                    'store.id'      : store.id,
+                    'pages.current' : pages.current,
+                    'category.id'   : category.id
+                } %}
+
+            </div>
+
+        </div>
+    </div>
+{% endif %}
+
+<div id="product-ajax" style="display: none;">
+
+    {% element 'snippets/product-ajax' {
+        'product' : product,
+        'slide'   : true
+    } %}
+
+</div>
+
+<div id="product-menu-ajax" style="display: none;">
+
+    {% element 'snippets/product-menu-ajax' {
+        'product' : product,
+        'slide'   : false
+    } %}
+
+</div>
+
+{% if product.has_variation %}
+    {% for variants in product %}
+        {% for sku in variants %}
+            {% for teste in sku.Sku %}
+                {% if loop.index == '1' %}
+                <div class="estoquevariacao" id-variacao="{{ sku.id }}" estoque-variacao="{{ sku.stock }}" style="display: none;"></div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+{% endif %}

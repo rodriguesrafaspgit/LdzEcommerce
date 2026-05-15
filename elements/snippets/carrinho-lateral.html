@@ -1,0 +1,43 @@
+{% if settings.carrinho_compras_tipo == '2' %}
+
+    <div class="carrinho-lateral">
+
+        <div class="carrinho-lateral-cabecalho">
+            <div class="carrinho-lateral-cabecalho-item">
+                <h3>Meu Carrinho</h3>
+            </div>
+            <div class="carrinho-lateral-cabecalho-item carrinho-lateral-fechar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="carrinho-lateral-corpo">
+            
+        </div>
+        <div class="carrinho-lateral-rodape">
+
+            <div class="carrinho-lateral-rodape-item carrinho-lateral-subtotal">
+                
+            </div>
+
+            <div class="carrinho-lateral-rodape-item carrinho-lateral-finalizar-compra">
+                <a href="{{ links.cart }}">
+                    Finalizar Compra
+                </a>
+            </div>
+
+            <div class="carrinho-lateral-rodape-item carrinho-lateral-continuar-comprando">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" style="margin-bottom: -4px;" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                </svg> 
+                Continuar Comprando
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="carrinho-fundo-sombra carrinho-lateral-fechar menu-lateral-fechar"></div>
+
+{% endif %}

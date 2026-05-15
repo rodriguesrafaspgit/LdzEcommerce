@@ -1,0 +1,32 @@
+{% if settings.barra_oferta_full_banners_ativo == '1' %}
+
+    {% if settings.barra_oferta_full_banners_exibir_timer == '1' %}
+        <div class="barra-oferta barra-oferta-full-banners">
+            <div class="container">
+                <div class="barra-oferta-full-banners-texto">
+                    {% if settings.barra_oferta_full_banners_url|length > 0 %}
+                        <a href="{{ settings.barra_oferta_full_banners_url }}">
+                    {% endif %}
+                        {{ settings.barra_oferta_full_banners_texto }}
+                    {% if settings.barra_oferta_full_banners_url|length > 0 %}
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="barra-oferta-full-banners-timer" data-inicial="{{ settings.barra_oferta_full_banners_data_inicial }}" data-final="{{ settings.barra_oferta_full_banners_data_final }}"></div>
+            </div>
+        </div>
+    {% else %}
+        <div class="barra-oferta barra-oferta-full-banners">
+            <div class="container center">
+                {% if settings.barra_oferta_full_banners_url|length > 0 %}
+                    <a href="{{ settings.barra_oferta_full_banners_url }}">
+                {% endif %}
+                    {{ settings.barra_oferta_full_banners_texto }}
+                {% if settings.barra_oferta_full_banners_url|length > 0 %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+{% endif %}

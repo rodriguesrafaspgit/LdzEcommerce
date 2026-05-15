@@ -1,0 +1,51 @@
+<div class="header-search-wrapper">
+
+
+    {% if exibir == 'true' %}
+        <div class="box-paginas-extras-cabecalho">
+
+            {%
+                if 
+                    (settings.pagina_extra_cabecalho_nome_1|length > 0 and settings.pagina_extra_cabecalho_link_1) or     
+                    (settings.pagina_extra_cabecalho_nome_2|length > 0 and settings.pagina_extra_cabecalho_link_2) or     
+                    (settings.pagina_extra_cabecalho_nome_3|length > 0 and settings.pagina_extra_cabecalho_link_3) or     
+                    (settings.pagina_extra_cabecalho_nome_4|length > 0 and settings.pagina_extra_cabecalho_link_4) or     
+                    (settings.pagina_extra_cabecalho_nome_5|length > 0 and settings.pagina_extra_cabecalho_link_5) 
+            %}
+
+                {% if settings.pagina_extra_cabecalho_nome_1|length > 0 and settings.pagina_extra_cabecalho_link_1 %}
+                    <a href="{{ settings.pagina_extra_cabecalho_link_1 }}"> {{ settings.pagina_extra_cabecalho_nome_1 }} </a>
+                {% endif %}
+
+                {% if settings.pagina_extra_cabecalho_nome_2|length > 0 and settings.pagina_extra_cabecalho_link_2 %}
+                    <a href="{{ settings.pagina_extra_cabecalho_link_2 }}"> {{ settings.pagina_extra_cabecalho_nome_2 }} </a>
+                {% endif %}
+
+                {% if settings.pagina_extra_cabecalho_nome_3|length > 0 and settings.pagina_extra_cabecalho_link_3 %}
+                    <a href="{{ settings.pagina_extra_cabecalho_link_3 }}"> {{ settings.pagina_extra_cabecalho_nome_3 }} </a>
+                {% endif %}
+
+                {% if settings.pagina_extra_cabecalho_nome_4|length > 0 and settings.pagina_extra_cabecalho_link_4 %}
+                    <a href="{{ settings.pagina_extra_cabecalho_link_4 }}"> {{ settings.pagina_extra_cabecalho_nome_4 }} </a>
+                {% endif %}
+
+                {% if settings.pagina_extra_cabecalho_nome_5|length > 0 and settings.pagina_extra_cabecalho_link_5 %}
+                    <a href="{{ settings.pagina_extra_cabecalho_link_5 }}"> {{ settings.pagina_extra_cabecalho_nome_5 }} </a>
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+
+    <form action="{{ links.search }}" method="get" data-search="suggestion">
+        <input type="hidden" name="loja" value="{{ store.id }}">
+        <input class="input-search" placeholder="{% if settings.cabecalho_texto_pesquisar|length > 0 %} {{ settings.cabecalho_texto_pesquisar }} {% else %} Pesquise aqui... {% endif %}" spellcheck="false" autocomplete="off" data-input="suggestion" type="text"  name="palavra_busca">
+        <button class="button-search" aria-label="Buscar">
+            <i class="icon icon-search"></i>
+        </button>
+        <div class="suggestion is-hidden" data-container="suggestion"></div>
+    </form>
+
+</div>

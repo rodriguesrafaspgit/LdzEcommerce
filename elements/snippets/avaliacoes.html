@@ -1,0 +1,26 @@
+{%
+    if settings.depoimentos_ambiente == '0' 
+    or (settings.depoimentos_ambiente == '1' and not utils.is_mobile) 
+    or (settings.depoimentos_ambiente == '2' and utils.is_mobile)    
+%}
+
+    {% for pages in pages.custom %}
+        {% if pages.info == "depoimentos_de_clientes" and settings.show_reviews %}
+            <div class="section section-avaliacoes slide-has-dots">
+                <div class="container">
+                    <div class="section-header">
+                        <h2 class="title-section">
+                            {% if settings.depoimento_titulo|length > 0 %}
+                                {{ settings.depoimento_titulo }}
+                            {% else %}
+                                Depoimentos
+                            {% endif %}
+                        </h2>
+                    </div>
+                    {% element 'CustomerReview.reviews' %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endif %}

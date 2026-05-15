@@ -1,0 +1,27 @@
+{% if settings.banner_tarja_desktop and not utils.is_mobile %}
+    <div class="banner-tarja">
+        <div class="container box-banners">
+            {% if settings.banner_tarja_desktop_link|length > 0 %}
+                <a href="{{ settings.banner_tarja_desktop_link }}">
+            {% endif %}
+                <img src="{{ asset(settings.banner_tarja_desktop) }}" class="lazyload" alt="Banner Tarja">
+            {% if settings.banner_tarja_desktop_link|length > 0 %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{% if settings.banner_tarja_mobile and utils.is_mobile %}
+    <div class="banner-tarja banner-tarja-mobile">
+        <div class="container box-banners">
+            {% if settings.banner_tarja_mobile_link|length > 0 %}
+                <a href="{{ settings.banner_tarja_mobile_link }}">
+            {% endif %}
+                <img src="{{ asset(settings.banner_tarja_mobile) }}" class="lazyload" alt="Banner Tarja">
+            {% if settings.banner_tarja_mobile_link|length > 0 %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,1244 @@
+{% if settings.exibir_vitrine_personalizada == '1' and 'home' in pages.current and ((not utils.is_mobile) or (utils.is_mobile and (not settings.desabilitar_vitrine_personalizada_mobile))) %}
+{% set vitrine_personalizada_status = 1 %}
+{% else %}
+{% set vitrine_personalizada_status = 0 %}
+{% endif %}
+
+{% if settings.exibir_promocao_destaque == '1' and 'home' in pages.current  %}
+{% set promocao_destaque_status = 1 %}
+{% else %}
+{% set promocao_destaque_status = 0 %}
+{% endif %}
+
+{% if not utils.is_mobile %}
+{% set quantidade_produtos = (settings.banner_vitrine_personalizada|length > 0) ? 2 : 4 %}
+{% set quantidade_produtos_pd = 4 %}
+{% else %}
+{% set quantidade_produtos = 2 %}
+{% set quantidade_produtos_pd = 2 %}
+{% endif %}
+
+{% if (utils.is_mobile and settings.habilitar_modo_turbo_mobile == '1' or not utils.is_mobile and settings.habilitar_modo_turbo_desktop == '1') and pages.current == 'home' %}
+
+<script> 
+
+function vitrineScript() {
+    (function($){
+        var ids_produtos_cat = '';
+
+        const url_vitrine = "";
+        var index, html_product, html_product_promo;
+
+        render_menu();
+        render_destaque();
+        vitrine_personalizada_categoria();
+
+        window.addEventListener('resize', function(event){
+            
+            sessionStorage.removeItem('promocaoDestaqueHTML');
+            sessionStorage.removeItem('promocaoDestaqueID');
+            sessionStorage.removeItem('menuCategoriaProductCID');
+            sessionStorage.removeItem('vitrinePersonalizadaHTML');
+            sessionStorage.removeItem('menuCategoriaProductBID');
+            sessionStorage.removeItem('vitrinePersonalizadaID');
+            sessionStorage.removeItem('menuCategoriaProductCHTML');
+            sessionStorage.removeItem('menuCategoriaProductBHTML');
+
+        });
+
+        function getProducts(ids = [], box = '', session_storage){
+        
+            if(ids.length > 0){
+
+                if(!sessionStorage.getItem(session_storage+'ID')){
+
+                    sessionStorage.setItem(session_storage+'ID', JSON.stringify(ids));
+                    
+                    return false;
+
+                }else if(sessionStorage.getItem(session_storage+'ID') == JSON.stringify(ids)){
+                                    
+                    if(typeof sessionStorage.getItem(session_storage+'HTML') != undefined && sessionStorage.getItem(session_storage+'HTML') != null && sessionStorage.getItem(session_storage+'HTML').length > 0 && $(sessionStorage.getItem(session_storage+'HTML')).length == ids.length ){
+                        
+                        return true;
+
+                    }else{
+
+                        sessionStorage.setItem(session_storage+'ID', JSON.stringify(ids));
+
+                        return false;
+
+                    }
+                } 
+            } 
+
+        }
+
+        function render_product(box, arr_flexslide = {}, slide, slider_box){
+            
+            if(box.length > 0){
+                
+                if(slide){
+
+                    var qtde_itens;
+                    var space_between;
+
+                    if(slider_box.length > 0 && slider_box == '.flexslider-produtos'){
+
+                        qtde_itens = $(box).attr('data-quantidade-produtos');
+
+                        if(window.innerWidth < 500){
+                            space_between = 6;
+                        }else if(window.innerWidth < 1025){
+                            space_between = 6;
+                        }else{
+                            space_between = 10;
+                        }
+                        
+                    }else{
+
+                        if(window.innerWidth < 500){
+                            qtde_itens = 2;
+                            space_between = 6;
+                        }else if(window.innerWidth < 1025){
+                            qtde_itens = 3;
+                            space_between = 6;
+                        }else{
+                            qtde_itens = 4;
+                            space_between = 10;
+                        }
+
+                    }
+
+                    setTimeout(function(){
+
+                        new Swiper(box+' .swiper-container', {
+                            preloadImages : false,
+                            loop          : true,
+                            autoHeight    : false,
+                            effect        : 'slide',
+                            slidesPerView : qtde_itens,
+                            spaceBetween: space_between,
+                            lazy :{
+                                loadPrevNext: true,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            on: {
+                                init: function(){
+
+                                    theme.loadVitrinePersonalizadaTimer();
+                                    theme.loadProdutosTimer();
+                                    
+                                    $(box+' .select-cor').each(function(){
+                                            
+                                        if($(this).find(' > option').length == 0){ 
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho').show();
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho option').show();
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho option:first').attr('selected', true);
+                                        }
+                                        
+                                    });
+
+                                    /*setTimeout(function(){
+
+                                        $(box +' .product').removeClass('show-down');
+
+                                        var altura = 0;
+
+                                        $(box +' .product').each(function(k, item){
+                                            if($(item).height() > altura){
+                                                altura = $(item).height();
+                                            }
+                                        });
+
+                                        $(box+' .product').height(altura + 40);
+                                        $(box+' .swiper-wrapper').height(altura + 40);
+
+                                    }, 40);*/
+
+                                }
+                            }
+                        });
+
+                    }, 400);
+                }
+                
+                $(box).show();
+
+                return true;
+
+            }
+
+            return false;
+        }
+
+        {% if settings.trocar_imagem_compra_direta %}
+            function variacoesImagens(id, dom){
+                jQuery.ajax({
+                    method: "GET",
+                    url: "/web_api/variants/" + id,
+                }).done(function(response) {   
+                    var imagensvariacoes = [];
+
+                    jQuery(response.Variant.VariantImage).each(function(k){
+                        // imagensvariacoes[k] = response.Variant.VariantImage[k].thumbs[180].https;
+                        imagensvariacoes[k] = response.Variant.VariantImage[k].https;
+
+                        if(k == 1){
+                            return false;
+                        }
+                    })
+
+                    if(imagensvariacoes.length == 1){
+                        jQuery(dom).parents('.product').find('.image img:eq(0)').attr('src', imagensvariacoes[0]);
+                    }else if(imagensvariacoes.length > 1){
+                        jQuery(dom).parents('.product').find('.image img:eq(0)').attr('src', imagensvariacoes[0]);
+                        jQuery(dom).parents('.product').find('.image img:eq(1)').attr('src', imagensvariacoes[1]);
+                    }
+                });
+            }
+        {% endif %}
+
+
+        /** Menu categoria Produto **/
+        function render_menu(){
+
+            const menu_categoria = {
+                1: "{{ settings.menu_categoria_produto_1 }}",
+                2: "{{ settings.menu_categoria_produto_2 }}",
+                3: "{{ settings.menu_categoria_produto_3 }}",
+                4: "{{ settings.menu_categoria_produto_4 }}",
+                5: "{{ settings.menu_categoria_produto_5 }}",
+                6: "{{ settings.menu_categoria_produto_6 }}",
+                7: "{{ settings.menu_categoria_produto_7 }}",
+                8: "{{ settings.menu_categoria_produto_8 }}",
+                9: "{{ settings.menu_categoria_produto_9 }}",
+                10: "{{ settings.menu_categoria_produto_10 }}",
+                11: "{{ settings.menu_categoria_produto_11 }}",
+                12: "{{ settings.menu_categoria_produto_12 }}",
+                13: "{{ settings.menu_categoria_produto_13 }}",
+                14: "{{ settings.menu_categoria_produto_14 }}",
+                15: "{{ settings.menu_categoria_produto_15 }}"
+            };
+
+            const menu_session = ['A', 'B', 'C', 'D', 'E', 'F', 'G', "H", 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+            
+            var new_menu_product = [];
+            
+            Object.keys(menu_categoria).map((k) => {
+                    if(menu_categoria[k].length > 0){
+                    new_menu_product.push({ 'key': k, 'value': menu_categoria[k], 'session':menu_session[k] });
+                }
+            });
+
+            if(new_menu_product.length > 0){
+
+                $(new_menu_product).each((i, v) => {
+
+                    var box = ".menu-categoria-product-"+v.key;
+                    var session_storage = 'menuCategoriaProduct'+v.session;
+                    
+                    const session_status = getProducts([v.value], box, session_storage);
+
+                    if(!session_status){
+
+                        $.ajax({
+                                url: url_vitrine + '/web_api/products/' + v.value,
+                                async: true
+                        }).done( (res) => {
+
+                            $.ajax({
+                                url: url_vitrine + '/' + res.Product.slug,
+                                async: true
+                            }).done( (res) => {                                
+                                const produto = $(res).find('#product-menu-ajax');
+                                const html = String(produto[0].innerHTML);
+                            
+                                if(html.length > 0 && $(box).length > 0){
+
+                                    $(box).append(html);
+                                    sessionStorage.setItem(session_storage+'HTML', html);
+                                }
+                            });
+                                    
+                        });
+
+                    }else{
+                        $(box).append(sessionStorage.getItem(session_storage+'HTML'));
+                        render_product(box, [], false, true);
+                    }
+
+                });
+            }
+        }
+
+        function vitrine_personalizada_categoria(){
+
+            var categoriavitrine = '{{ settings.vitrine_personalizada_categoria }}';
+
+            if(typeof categoriavitrine != undefined && categoriavitrine != null){
+                var auxcategoria;
+
+                var params = {};
+                params["category_id"] = categoriavitrine;
+
+                jQuery.ajax({
+                    url     : '/web_api/products/',
+                    method  : 'get',
+                    data: params,
+                    async: true,
+                    complete: function(){
+                        render_vitrine();
+                    }
+                }).done(function(response) {
+                    var auxcategoria = jQuery(response);
+
+                    var auxcategoria2 = '';
+
+                    jQuery(auxcategoria[0].Products).each(function(k, item){
+                        if(k < 8){
+                            auxcategoria2 = auxcategoria2 +auxcategoria[0].Products[k].Product.id;
+                            if(k < (auxcategoria[0].Products.length)-1 && k < 7){
+                                auxcategoria2 = auxcategoria2 + ',';
+                            }
+                        }
+                    });
+
+                    ids_produtos_cat = auxcategoria2;
+                });
+            }
+        }
+
+        /** Vitrine personalizada **/
+        function render_vitrine(){
+
+            var vitrine_qtde = "{{ quantidade_produtos }}";
+            var vp_exibir_produto = "{{(settings.exibir_vp_produtos_sem_estoque|length > 0)?settings.exibir_vp_produtos_sem_estoque:0}}";
+            
+            {% if settings.vitrine_personalizada_categoria %}
+                var vitrine =  ids_produtos_cat;
+            {% else %}
+                var vitrine = '{{ settings.vitrine_personalizada_produtos }}';
+            {% endif %}
+            
+            var box_vitrine = '#vitrine-personalizada';
+            var session_storage = 'vitrinePersonalizada';
+            var vitrine_status = "{{ vitrine_personalizada_status }}";
+            var box_slider = '.flexslider-produtos';
+            
+            $(box_vitrine).hide();
+
+            if(vitrine_status == '1'){
+
+                if(vitrine.length > 0){
+                    var vitrine_arr = vitrine.split(',');
+                    html_product = '';
+                    var index_product = 0;
+
+                    const arr_flexslide = {
+                        min: vitrine_qtde,
+                        max: vitrine_qtde,
+                        total: vitrine_qtde
+                    }
+
+                    if(vitrine_arr.length > 0){
+
+                        const session_status = getProducts(vitrine_arr, box_vitrine, session_storage);
+                        
+                        if(!session_status){
+
+                            $(vitrine_arr).each((i, v) => {
+
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + v,
+                                    async: true
+                                }).done(async (res) => {
+                                    
+                                    var stock_continue = true;
+
+                                    if(vp_exibir_produto == '0'){
+
+                                        await $.ajax({
+                                            url: url_vitrine + '/web_api/search?id=' + v,
+                                            async: false
+                                        }).done(async (res) => {
+                                            if(res.Products.length == 0){
+                                                stock_continue = false;
+                                                vitrine_arr.splice(i, 1);
+                                            }
+                                        });
+                                    }
+
+                                    $.ajax({
+                                        url: url_vitrine + '/' + res.Product.slug,
+                                        async: true
+                                    }).done( (ress) => {
+                                    
+                                        const produto = $(ress).find('#product-ajax');
+                                        const html = String(produto[0].innerHTML);
+                                    
+                                        if(html.length > 0 && $(box_vitrine).length > 0){
+                                            
+                                            if(stock_continue){
+                                                $(box_vitrine + ' .swiper-wrapper').append("<div class='item swiper-slide'>"+html+"</div>");
+                                                html_product += "<div class='item swiper-slide'>"+html+"</div>";
+                                            }
+
+                                            index_product++;
+                                            
+                                            if((index_product) == vitrine_arr.length){
+                                                render_product(box_vitrine, arr_flexslide, true, box_slider);
+                                                sessionStorage.setItem(session_storage+'HTML', html_product);
+                                                $('.paleta-cores').show()
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+
+                        }else{
+                            $(box_vitrine + ' .swiper-wrapper').append(sessionStorage.getItem(session_storage+'HTML'));
+                            render_product(box_vitrine, arr_flexslide, true, box_slider);
+                            $('.paleta-cores').show()
+                        }
+                    }                    
+                }
+            }
+        }
+
+        /** Promocao Destaque **/
+        function render_destaque(){
+
+            var vitrine_qtde = "{{ quantidade_produtos_pd }}";
+            var vitrine =  "{{ settings.promocao_destaque_produtos }}";
+            var box_vitrine = '#promocao-destaque';
+            var session_storage = 'promocaoDestaque';
+            var vitrine_status = "{{ promocao_destaque_status }}";            
+            var box_slider = '.flexslider-promocao-destaque';
+
+            $(box_vitrine).hide();
+
+            if(vitrine_status == '1'){
+
+                if(vitrine.length > 0){
+                    var vitrine_arr = vitrine.split(',');
+                    html_product_promo = '';
+                    var index_product = 0;
+
+                    const arr_flexslide = {
+                        min: vitrine_qtde,
+                        max: vitrine_qtde,
+                        total: vitrine_qtde
+                    }
+
+                    if(vitrine_arr.length > 0){
+                        const session_status = getProducts(vitrine_arr, box_vitrine, session_storage);
+                        
+                        if(!session_status){
+
+                            $(vitrine_arr).each((i, v) => {
+
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + v,
+                                    async: true
+                                }).done( (res) => {
+                                    $.ajax({
+                                        url: url_vitrine + '/' + res.Product.slug,
+                                        async: true
+                                    }).done( (ress) => {
+                                    
+                                        const produto = $(ress).find('#product-ajax');
+                                        const html = String(produto[0].innerHTML);
+                                    
+                                        if(html.length > 0 && $(box_vitrine).length > 0){
+
+                                            $(box_vitrine + ' .swiper-wrapper').append("<div class='item swiper-slide'>"+html+"</div>");
+                                            
+                                            index_product++;
+                                            html_product_promo += "<div class='item swiper-slide'>"+html+"</div>";
+                                            
+                                            if((index_product) == vitrine_arr.length){
+                                                
+                                                render_product(box_vitrine, arr_flexslide, true, box_slider);
+
+                                                sessionStorage.setItem(session_storage+'HTML', html_product_promo);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+
+                        }else{
+                            $(box_vitrine + ' .swiper-wrapper').append(sessionStorage.getItem(session_storage+'HTML'));
+                            render_product(box_vitrine, arr_flexslide, true, box_slider);
+                        }
+                    }                    
+                }
+            }
+
+        };
+
+        function produto_perfil_ajax(){
+
+            if($('.produto-perfil-ajax').length > 0){
+
+                $('.produto-perfil-ajax').each(function(k, item){
+
+                    var produto_perfil_id = $(item).data('produto');
+                    var produtos_id = [];
+                    var produto_perfil_div = $(item).data('div');
+
+                    if(produto_perfil_id.toString().indexOf(',') != -1){
+
+                        produtos_id = produto_perfil_id.split(',');
+
+                        if(produtos_id.length > 0){
+
+                            $(produtos_id).each(function(k, prod_id){
+
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + prod_id,
+                                    async: true
+                                }).done( (res) => {
+
+                                    var produto_dados = res.Product;
+
+                                    if(produto_dados.name){
+                                        var box_produto_perfil = ".box-produto-perfil-"+prod_id;
+                                        produto_perfil(produto_dados, box_produto_perfil, "append");
+                                    }
+
+                                });
+
+                            });
+
+                        }
+
+                    }else{
+
+                        if(produto_perfil_id != "" && produto_perfil_div != ""){
+
+                            $.ajax({
+                                url: url_vitrine + '/web_api/products/' + produto_perfil_id,
+                                async: true
+                            }).done( (res) => {
+
+                                var produto_dados = res.Product;
+
+                                if(produto_dados.name){
+                                    produto_perfil(produto_dados, produto_perfil_div);
+                                }
+
+                            });
+
+                        }
+
+                    }
+
+                });
+
+            }
+
+        }
+
+        function produto_perfil(produto_dados, div_nome, extra = ""){
+
+            var produto_perfil_url = produto_dados.url.https;
+            var produto_perfil_nome = produto_dados.name;
+            var produto_perfil_preco = (produto_dados.promotional_price > 0) ? produto_perfil_price_format(produto_dados.promotional_price) : produto_perfil_price_format(produto_dados.price);
+            var produto_perfil_preco_desc = (produto_dados.payment_option.length > 0) ? "<p>"+produto_dados.payment_option.toString().replace("Sem", "sem")+"</p>" : "";
+            var produto_perfil_url = produto_dados.url.https;
+            var produto_perfil_img = (produto_dados.image == '1') ? "<img src='"+produto_dados.ProductImage[0].thumbs["180"].https+"' alt='"+produto_dados.name+"'>" : '';
+
+            if(produto_dados.upon_request == '1'){
+                produto_perfil_preco = "Sob consulta";
+            }else{
+                produto_perfil_preco = "por: <strong>R$ "+produto_perfil_preco+"</strong>";
+            }
+
+            var div_perfil = `
+                
+                <div class="produto-perfil">
+
+                    <a href="`+produto_perfil_url+`">
+
+                        <div class="produto-perfil-imagem">
+                            `+produto_perfil_img+`
+                        </div>
+
+                        <div class="produto-perfil-nome">
+                            `+produto_perfil_nome+`
+                        </div>
+
+                        <div class="produto-perfil-preco">
+                            `+produto_perfil_preco+`
+                            `+produto_perfil_preco_desc+`
+                        </div>
+
+                        {% if settings.comprar_somente_cliente_logado == '1' %}
+                        
+                            <div class="autenticacao-comprar-produto tray-hide" data-logged-user="false">
+                                <a href="{{ links.login }}">
+                                    <div class="w-100">
+                                        {% if settings.comprar_somente_cliente_logado_frase|length == 0 %}
+                                            Para realizar a compra, por favor realize o Login
+                                        {% else %}
+                                            {{ settings.comprar_somente_cliente_logado_frase }}
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            </div>
+                        
+                        {% endif %}
+
+                    </a>
+                    
+                </div>
+            `;
+
+            if(extra == "append"){
+                $(div_nome).append(div_perfil);
+            }else{
+                $(div_nome).html(div_perfil);
+            }
+
+        }
+
+
+        produto_perfil_ajax();
+
+        {% if settings.trocar_imagem_compra_direta %}
+        jQuery(document).on('click', '.paleta-cores-item', function(){
+            var idvariacao = jQuery(this).attr('id');
+            
+            variacoesImagens(idvariacao, jQuery(this));
+        });
+
+        jQuery(document).on('change', '.product .config-variacoes-compra', function(){
+            var idvariacao = jQuery(this).find('select :selected').attr('value');
+
+            variacoesImagens(idvariacao, jQuery(this));
+        });
+        {% endif %}
+
+    }(jQuery));
+
+};
+</script>
+
+{% else %}
+<script> 
+    (function($){
+        var ids_produtos_cat = '';
+        
+        const url_vitrine = "";
+        var index, html_product, html_product_promo;
+        
+        render_menu();
+        render_destaque();
+        vitrine_personalizada_categoria();
+        
+        window.addEventListener('resize', function(event){
+            
+            sessionStorage.removeItem('promocaoDestaqueHTML');
+            sessionStorage.removeItem('promocaoDestaqueID');
+            sessionStorage.removeItem('menuCategoriaProductCID');
+            sessionStorage.removeItem('vitrinePersonalizadaHTML');
+            sessionStorage.removeItem('menuCategoriaProductBID');
+            sessionStorage.removeItem('vitrinePersonalizadaID');
+            sessionStorage.removeItem('menuCategoriaProductCHTML');
+            sessionStorage.removeItem('menuCategoriaProductBHTML');
+        
+        });
+        
+        function getProducts(ids = [], box = '', session_storage){
+        
+            if(ids.length > 0){
+        
+                if(!sessionStorage.getItem(session_storage+'ID')){
+        
+                    sessionStorage.setItem(session_storage+'ID', JSON.stringify(ids));
+                    
+                    return false;
+        
+                }else if(sessionStorage.getItem(session_storage+'ID') == JSON.stringify(ids)){
+                                    
+                    if(typeof sessionStorage.getItem(session_storage+'HTML') != undefined && sessionStorage.getItem(session_storage+'HTML') != null && sessionStorage.getItem(session_storage+'HTML').length > 0 && $(sessionStorage.getItem(session_storage+'HTML')).length == ids.length ){
+                        
+                        return true;
+        
+                    }else{
+        
+                        sessionStorage.setItem(session_storage+'ID', JSON.stringify(ids));
+        
+                        return false;
+        
+                    }
+                } 
+            } 
+        
+        }
+        
+        function render_product(box, arr_flexslide = {}, slide, slider_box){
+            
+            if(box.length > 0){
+                
+                if(slide){
+        
+                    var qtde_itens;
+                    var space_between;
+        
+                    if(slider_box.length > 0 && slider_box == '.flexslider-produtos'){
+        
+                        qtde_itens = $(box).attr('data-quantidade-produtos');
+        
+                        if(window.innerWidth < 500){
+                            space_between = 6;
+                        }else if(window.innerWidth < 1025){
+                            space_between = 6;
+                        }else{
+                            space_between = 10;
+                        }
+                        
+                    }else{
+        
+                        if(window.innerWidth < 500){
+                            qtde_itens = 2;
+                            space_between = 6;
+                        }else if(window.innerWidth < 1025){
+                            qtde_itens = 3;
+                            space_between = 6;
+                        }else{
+                            qtde_itens = 4;
+                            space_between = 10;
+                        }
+        
+                    }
+        
+                    setTimeout(function(){
+        
+                        new Swiper(box+' .swiper-container', {
+                            preloadImages : false,
+                            loop          : true,
+                            autoHeight    : false,
+                            effect        : 'slide',
+                            slidesPerView : qtde_itens,
+                            spaceBetween: space_between,
+                            lazy :{
+                                loadPrevNext: true,
+                            },
+                            pagination: {
+                                el: ".swiper-pagination",
+                                clickable: true,
+                            },
+                            navigation: {
+                                nextEl: '.swiper-button-next',
+                                prevEl: '.swiper-button-prev',
+                            },
+                            on: {
+                                init: function(){
+        
+                                    theme.loadVitrinePersonalizadaTimer();
+                                    theme.loadProdutosTimer();
+                                    
+                                    $(box+' .select-cor').each(function(){
+                                            
+                                        if($(this).find(' > option').length == 0){ 
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho').show();
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho option').show();
+                                            $(this).parents('.config-variacoes-compra').find(' > .select-tamanho option:first').attr('selected', true);
+                                        }
+                                        
+                                    });
+        
+                                    /*setTimeout(function(){
+        
+                                        $(box +' .product').removeClass('show-down');
+        
+                                        var altura = 0;
+        
+                                        $(box +' .product').each(function(k, item){
+                                            if($(item).height() > altura){
+                                                altura = $(item).height();
+                                            }
+                                        });
+        
+                                        $(box+' .product').height(altura + 40);
+                                        $(box+' .swiper-wrapper').height(altura + 40);
+        
+                                    }, 40);*/
+        
+                                }
+                            }
+                        });
+        
+                    }, 400);
+                }
+                
+                $(box).show();
+        
+                return true;
+        
+            }
+        
+            return false;
+        }
+        
+        {% if settings.trocar_imagem_compra_direta %}
+            function variacoesImagens(id, dom){
+                jQuery.ajax({
+                    method: "GET",
+                    url: "/web_api/variants/" + id,
+                }).done(function(response) {   
+                    var imagensvariacoes = [];
+        
+                    jQuery(response.Variant.VariantImage).each(function(k){
+                        // imagensvariacoes[k] = response.Variant.VariantImage[k].thumbs[180].https;
+                        imagensvariacoes[k] = response.Variant.VariantImage[k].https;
+        
+                        if(k == 1){
+                            return false;
+                        }
+                    })
+        
+                    if(imagensvariacoes.length == 1){
+                        jQuery(dom).parents('.product').find('.image img:eq(0)').attr('src', imagensvariacoes[0]);
+                    }else if(imagensvariacoes.length > 1){
+                        jQuery(dom).parents('.product').find('.image img:eq(0)').attr('src', imagensvariacoes[0]);
+                        jQuery(dom).parents('.product').find('.image img:eq(1)').attr('src', imagensvariacoes[1]);
+                    }
+                });
+            }
+        {% endif %}
+        
+        
+        /** Menu categoria Produto **/
+        function render_menu(){
+        
+            const menu_categoria = {
+                1: "{{ settings.menu_categoria_produto_1 }}",
+                2: "{{ settings.menu_categoria_produto_2 }}",
+                3: "{{ settings.menu_categoria_produto_3 }}",
+                4: "{{ settings.menu_categoria_produto_4 }}",
+                5: "{{ settings.menu_categoria_produto_5 }}",
+                6: "{{ settings.menu_categoria_produto_6 }}",
+                7: "{{ settings.menu_categoria_produto_7 }}",
+                8: "{{ settings.menu_categoria_produto_8 }}",
+                9: "{{ settings.menu_categoria_produto_9 }}",
+                10: "{{ settings.menu_categoria_produto_10 }}",
+                11: "{{ settings.menu_categoria_produto_11 }}",
+                12: "{{ settings.menu_categoria_produto_12 }}",
+                13: "{{ settings.menu_categoria_produto_13 }}",
+                14: "{{ settings.menu_categoria_produto_14 }}",
+                15: "{{ settings.menu_categoria_produto_15 }}"
+            };
+        
+            const menu_session = ['A', 'B', 'C', 'D', 'E', 'F', 'G', "H", 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'];
+            
+            var new_menu_product = [];
+            
+            Object.keys(menu_categoria).map((k) => {
+                    if(menu_categoria[k].length > 0){
+                    new_menu_product.push({ 'key': k, 'value': menu_categoria[k], 'session':menu_session[k] });
+                }
+            });
+        
+            if(new_menu_product.length > 0){
+        
+                $(new_menu_product).each((i, v) => {
+        
+                    var box = ".menu-categoria-product-"+v.key;
+                    var session_storage = 'menuCategoriaProduct'+v.session;
+                    
+                    const session_status = getProducts([v.value], box, session_storage);
+        
+                    if(!session_status){
+        
+                        $.ajax({
+                                url: url_vitrine + '/web_api/products/' + v.value,
+                                async: true
+                        }).done( (res) => {
+        
+                            $.ajax({
+                                url: url_vitrine + '/' + res.Product.slug,
+                                async: true
+                            }).done( (res) => {                                
+                                const produto = $(res).find('#product-menu-ajax');
+                                const html = String(produto[0].innerHTML);
+                            
+                                if(html.length > 0 && $(box).length > 0){
+        
+                                    $(box).append(html);
+                                    sessionStorage.setItem(session_storage+'HTML', html);
+                                }
+                            });
+                                    
+                        });
+        
+                    }else{
+                        $(box).append(sessionStorage.getItem(session_storage+'HTML'));
+                        render_product(box, [], false, true);
+                    }
+        
+                });
+            }
+        }
+        
+        function vitrine_personalizada_categoria(){
+        
+            var categoriavitrine = '{{ settings.vitrine_personalizada_categoria }}';
+        
+            if(typeof categoriavitrine != undefined && categoriavitrine != null){
+                var auxcategoria;
+        
+                var params = {};
+                params["category_id"] = categoriavitrine;
+        
+                jQuery.ajax({
+                    url     : '/web_api/products/',
+                    method  : 'get',
+                    data: params,
+                    async: true,
+                    complete: function(){
+                        render_vitrine();
+                    }
+                }).done(function(response) {
+                    var auxcategoria = jQuery(response);
+        
+                    var auxcategoria2 = '';
+        
+                    jQuery(auxcategoria[0].Products).each(function(k, item){
+                        if(k < 8){
+                            auxcategoria2 = auxcategoria2 +auxcategoria[0].Products[k].Product.id;
+                            if(k < (auxcategoria[0].Products.length)-1 && k < 7){
+                                auxcategoria2 = auxcategoria2 + ',';
+                            }
+                        }
+                    });
+        
+                    ids_produtos_cat = auxcategoria2;
+                });
+            }
+        }
+        
+        /** Vitrine personalizada **/
+        function render_vitrine(){
+        
+            var vitrine_qtde = "{{ quantidade_produtos }}";
+            var vp_exibir_produto = "{{(settings.exibir_vp_produtos_sem_estoque|length > 0)?settings.exibir_vp_produtos_sem_estoque:0}}";
+            
+            {% if settings.vitrine_personalizada_categoria %}
+                var vitrine =  ids_produtos_cat;
+            {% else %}
+                var vitrine = '{{ settings.vitrine_personalizada_produtos }}';
+            {% endif %}
+            
+            var box_vitrine = '#vitrine-personalizada';
+            var session_storage = 'vitrinePersonalizada';
+            var vitrine_status = "{{ vitrine_personalizada_status }}";
+            var box_slider = '.flexslider-produtos';
+            
+            $(box_vitrine).hide();
+        
+            if(vitrine_status == '1'){
+        
+                if(vitrine.length > 0){
+                    var vitrine_arr = vitrine.split(',');
+                    html_product = '';
+                    var index_product = 0;
+        
+                    const arr_flexslide = {
+                        min: vitrine_qtde,
+                        max: vitrine_qtde,
+                        total: vitrine_qtde
+                    }
+        
+                    if(vitrine_arr.length > 0){
+        
+                        const session_status = getProducts(vitrine_arr, box_vitrine, session_storage);
+                        
+                        if(!session_status){
+        
+                            $(vitrine_arr).each((i, v) => {
+        
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + v,
+                                    async: true
+                                }).done(async (res) => {
+                                    
+                                    var stock_continue = true;
+        
+                                    if(vp_exibir_produto == '0'){
+        
+                                        await $.ajax({
+                                            url: url_vitrine + '/web_api/search?id=' + v,
+                                            async: false
+                                        }).done(async (res) => {
+                                            if(res.Products.length == 0){
+                                                stock_continue = false;
+                                                vitrine_arr.splice(i, 1);
+                                            }
+                                        });
+                                    }
+        
+                                    $.ajax({
+                                        url: url_vitrine + '/' + res.Product.slug,
+                                        async: true
+                                    }).done( (ress) => {
+                                    
+                                        const produto = $(ress).find('#product-ajax');
+                                        const html = String(produto[0].innerHTML);
+                                    
+                                        if(html.length > 0 && $(box_vitrine).length > 0){
+                                            
+                                            if(stock_continue){
+                                                $(box_vitrine + ' .swiper-wrapper').append("<div class='item swiper-slide'>"+html+"</div>");
+                                                html_product += "<div class='item swiper-slide'>"+html+"</div>";
+                                            }
+        
+                                            index_product++;
+                                            
+                                            if((index_product) == vitrine_arr.length){
+                                                render_product(box_vitrine, arr_flexslide, true, box_slider);
+                                                sessionStorage.setItem(session_storage+'HTML', html_product);
+                                                $('.paleta-cores').show()
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+        
+                        }else{
+                            $(box_vitrine + ' .swiper-wrapper').append(sessionStorage.getItem(session_storage+'HTML'));
+                            render_product(box_vitrine, arr_flexslide, true, box_slider);
+                            $('.paleta-cores').show()
+                        }
+                    }                    
+                }
+            }
+        }
+        
+        /** Promocao Destaque **/
+        function render_destaque(){
+        
+            var vitrine_qtde = "{{ quantidade_produtos_pd }}";
+            var vitrine =  "{{ settings.promocao_destaque_produtos }}";
+            var box_vitrine = '#promocao-destaque';
+            var session_storage = 'promocaoDestaque';
+            var vitrine_status = "{{ promocao_destaque_status }}";            
+            var box_slider = '.flexslider-promocao-destaque';
+        
+            $(box_vitrine).hide();
+        
+            if(vitrine_status == '1'){
+        
+                if(vitrine.length > 0){
+                    var vitrine_arr = vitrine.split(',');
+                    html_product_promo = '';
+                    var index_product = 0;
+        
+                    const arr_flexslide = {
+                        min: vitrine_qtde,
+                        max: vitrine_qtde,
+                        total: vitrine_qtde
+                    }
+        
+                    if(vitrine_arr.length > 0){
+                        const session_status = getProducts(vitrine_arr, box_vitrine, session_storage);
+                        
+                        if(!session_status){
+        
+                            $(vitrine_arr).each((i, v) => {
+        
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + v,
+                                    async: true
+                                }).done( (res) => {
+                                    $.ajax({
+                                        url: url_vitrine + '/' + res.Product.slug,
+                                        async: true
+                                    }).done( (ress) => {
+                                    
+                                        const produto = $(ress).find('#product-ajax');
+                                        const html = String(produto[0].innerHTML);
+                                    
+                                        if(html.length > 0 && $(box_vitrine).length > 0){
+        
+                                            $(box_vitrine + ' .swiper-wrapper').append("<div class='item swiper-slide'>"+html+"</div>");
+                                            
+                                            index_product++;
+                                            html_product_promo += "<div class='item swiper-slide'>"+html+"</div>";
+                                            
+                                            if((index_product) == vitrine_arr.length){
+                                                
+                                                render_product(box_vitrine, arr_flexslide, true, box_slider);
+        
+                                                sessionStorage.setItem(session_storage+'HTML', html_product_promo);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+        
+                        }else{
+                            $(box_vitrine + ' .swiper-wrapper').append(sessionStorage.getItem(session_storage+'HTML'));
+                            render_product(box_vitrine, arr_flexslide, true, box_slider);
+                        }
+                    }                    
+                }
+            }
+        
+        };
+        
+        function produto_perfil_ajax(){
+        
+            if($('.produto-perfil-ajax').length > 0){
+        
+                $('.produto-perfil-ajax').each(function(k, item){
+        
+                    var produto_perfil_id = $(item).data('produto');
+                    var produtos_id = [];
+                    var produto_perfil_div = $(item).data('div');
+        
+                    if(produto_perfil_id.toString().indexOf(',') != -1){
+        
+                        produtos_id = produto_perfil_id.split(',');
+        
+                        if(produtos_id.length > 0){
+        
+                            $(produtos_id).each(function(k, prod_id){
+        
+                                $.ajax({
+                                    url: url_vitrine + '/web_api/products/' + prod_id,
+                                    async: true
+                                }).done( (res) => {
+        
+                                    var produto_dados = res.Product;
+        
+                                    if(produto_dados.name){
+                                        var box_produto_perfil = ".box-produto-perfil-"+prod_id;
+                                        produto_perfil(produto_dados, box_produto_perfil, "append");
+                                    }
+        
+                                });
+        
+                            });
+        
+                        }
+        
+                    }else{
+        
+                        if(produto_perfil_id != "" && produto_perfil_div != ""){
+        
+                            $.ajax({
+                                url: url_vitrine + '/web_api/products/' + produto_perfil_id,
+                                async: true
+                            }).done( (res) => {
+        
+                                var produto_dados = res.Product;
+        
+                                if(produto_dados.name){
+                                    produto_perfil(produto_dados, produto_perfil_div);
+                                }
+        
+                            });
+        
+                        }
+        
+                    }
+        
+                });
+        
+            }
+        
+        }
+        
+        function produto_perfil(produto_dados, div_nome, extra = ""){
+        
+            var produto_perfil_url = produto_dados.url.https;
+            var produto_perfil_nome = produto_dados.name;
+            var produto_perfil_preco = (produto_dados.promotional_price > 0) ? produto_perfil_price_format(produto_dados.promotional_price) : produto_perfil_price_format(produto_dados.price);
+            var produto_perfil_preco_desc = (produto_dados.payment_option.length > 0) ? "<p>"+produto_dados.payment_option.toString().replace("Sem", "sem")+"</p>" : "";
+            var produto_perfil_url = produto_dados.url.https;
+            var produto_perfil_img = (produto_dados.image == '1') ? "<img src='"+produto_dados.ProductImage[0].thumbs["180"].https+"' alt='"+produto_dados.name+"'>" : '';
+        
+            if(produto_dados.upon_request == '1'){
+                produto_perfil_preco = "Sob consulta";
+            }else{
+                produto_perfil_preco = "por: <strong>R$ "+produto_perfil_preco+"</strong>";
+            }
+        
+            var div_perfil = `
+                
+                <div class="produto-perfil">
+        
+                    <a href="`+produto_perfil_url+`">
+        
+                        <div class="produto-perfil-imagem">
+                            `+produto_perfil_img+`
+                        </div>
+        
+                        <div class="produto-perfil-nome">
+                            `+produto_perfil_nome+`
+                        </div>
+        
+                        <div class="produto-perfil-preco">
+                            `+produto_perfil_preco+`
+                            `+produto_perfil_preco_desc+`
+                        </div>
+        
+                        {% if settings.comprar_somente_cliente_logado == '1' %}
+                        
+                            <div class="autenticacao-comprar-produto tray-hide" data-logged-user="false">
+                                <a href="{{ links.login }}">
+                                    <div class="w-100">
+                                        {% if settings.comprar_somente_cliente_logado_frase|length == 0 %}
+                                            Para realizar a compra, por favor realize o Login
+                                        {% else %}
+                                            {{ settings.comprar_somente_cliente_logado_frase }}
+                                        {% endif %}
+                                    </div>
+                                </a>
+                            </div>
+                        
+                        {% endif %}
+        
+                    </a>
+                    
+                </div>
+            `;
+        
+            if(extra == "append"){
+                $(div_nome).append(div_perfil);
+            }else{
+                $(div_nome).html(div_perfil);
+            }
+        
+        }
+        
+        
+        produto_perfil_ajax();
+        
+        {% if settings.trocar_imagem_compra_direta %}
+        jQuery(document).on('click', '.paleta-cores-item', function(){
+            var idvariacao = jQuery(this).attr('id');
+            
+            variacoesImagens(idvariacao, jQuery(this));
+        });
+        
+        jQuery(document).on('change', '.product .config-variacoes-compra', function(){
+            var idvariacao = jQuery(this).find('select :selected').attr('value');
+        
+            variacoesImagens(idvariacao, jQuery(this));
+        });
+        {% endif %}
+    }(jQuery));    
+</script>
+{% endif %}

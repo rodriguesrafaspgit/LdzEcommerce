@@ -1,0 +1,37 @@
+{%
+    if settings.noticias_ambiente == '0' 
+    or (settings.noticias_ambiente == '1' and not utils.is_mobile) 
+    or (settings.noticias_ambiente == '2' and utils.is_mobile)    
+%}
+
+    {% if settings.noticias_ativo == '1' %}
+        <div class="section section-news">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="title-section">
+                        {% if settings.noticias_titulo|length > 0 %}
+                            {{ settings.noticias_titulo }}
+                        {% else %}
+                            Notícias
+                        {% endif %}
+                    </h2>
+                </div>
+            </div>
+            <div class="container news-content swiper">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper"></div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+                {% if settings.noticias_link|length > 0 %}
+                    <div class="news-content-link">
+                        <a href="{{ settings.noticias_link }}" class="news-content-link-button">
+                            {{ settings.noticias_texto_link|length > 0 ? settings.noticias_texto_link : 'Ver notícias' }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+{% endif %}

@@ -1,0 +1,212 @@
+{% set more_quantity = (settings.menu_quantidade_itens and settings.menu_quantidade_itens matches '/^\\d+$/') ? settings.menu_quantidade_itens : 6 %}
+
+{% if categories | length > more_quantity %}
+    {% set show_categories = categories | slice(0, more_quantity) %}
+    {% set more_categories = categories | slice(more_quantity) %}
+{% else %}
+    {% set show_categories = categories %}
+    {% set more_categories = null %}
+{% endif %}
+
+{% if settings.menu_disposicao == '1' %}
+    {% set menu_disposicao_class = 'justify-center' %}
+{% elseif settings.menu_disposicao == '2' %}
+    {% set menu_disposicao_class = 'justify-between' %}
+{% elseif settings.menu_disposicao == '3' %}
+    {% set menu_disposicao_class = '' %}
+{% elseif settings.menu_disposicao == '4' %}
+    {% set menu_disposicao_class = 'justify-end' %}
+{% else %}
+    {% set menu_disposicao_class = 'justify-center' %}
+{% endif %}
+
+{%
+    set icones_menu = [
+        settings.icone_menu_imagem_1,
+        settings.icone_menu_imagem_2,
+        settings.icone_menu_imagem_3,
+        settings.icone_menu_imagem_4,
+        settings.icone_menu_imagem_5,
+        settings.icone_menu_imagem_6,
+        settings.icone_menu_imagem_7,
+        settings.icone_menu_imagem_8,
+        settings.icone_menu_imagem_9,
+        settings.icone_menu_imagem_10,
+        settings.icone_menu_imagem_11,
+        settings.icone_menu_imagem_12,
+        settings.icone_menu_imagem_13,
+        settings.icone_menu_imagem_14,
+        settings.icone_menu_imagem_15
+    ]
+%}
+
+{% set contador_menu = 0 %}
+
+{% if settings.pagina_extra_menu_nome_1|length > 0 and settings.pagina_extra_menu_link_1|length > 0 and settings.pagina_extra_menu_posicao_1 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+{% if settings.pagina_extra_menu_nome_2|length > 0 and settings.pagina_extra_menu_link_2|length > 0 and settings.pagina_extra_menu_posicao_2 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+{% if settings.pagina_extra_menu_nome_3|length > 0 and settings.pagina_extra_menu_link_3|length > 0 and settings.pagina_extra_menu_posicao_3 == '1' %}
+    {% set contador_menu = contador_menu + 1 %}
+{% endif %}
+
+<ul class="list">
+
+    {% element 'snippets/menu-paginas-extras' {'posicao': 1, 'icones_menu': icones_menu} %}
+
+    {% set cont_sub_menu = 1 %}
+
+    {% for key,category in show_categories %}
+        <li class="first-level {%- if category.children %} sub {%- endif %}">
+
+            {% if category.children %}
+
+                <div class="first-level-name-icone">
+
+                    <div class="first-level-name">
+
+                        <a href="{{ category.link }}" title="{{ category.name }}">
+                    
+                            <div class="name">
+
+                                {% if icones_menu[contador_menu]|length > 0 %}
+                                    <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                                {% endif %}
+
+                                {{ category.name }}
+
+                            </div>
+
+                        </a>
+                        
+                    </div>
+
+                    <div class="first-level-icone">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <a href="{{ category.link }}" title="{{ category.name }}">
+
+                    <div class="name">
+
+                        {% if icones_menu[contador_menu]|length > 0 %}
+                            <img src="{{ asset(icones_menu[contador_menu]) }}" alt="Ícone menu">
+                        {% endif %}
+
+                        {{ category.name }}
+
+                    </div>
+
+                </a>
+
+            {% endif %}
+
+            {% set contador_menu = contador_menu + 1 %}
+            
+            {% if category.children %}
+            
+                <div class="sub-list second-level">
+
+                    <ul>
+                
+                        <a href="{{ category.link }}" title="{{ category.name }}" style="font-weight: 400;">Ver {{ category.name }}</a>
+
+                        {% for level2 in category.children %}
+
+                            <li {% if level2.children %} class="sub" {% endif %}>
+                                
+                                <a href="{{ level2.link }}" title="{{ level2.name }}">{{ level2.name }}</a>
+                            
+                                {% if level2.children %}
+                                <ul class="sub-list third-level">
+                                    {% for level3 in level2.children %}
+                                    <li>
+                                        <a href="{{ level3.link }}" title="{{ level3.name }}">{{ level3.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %} 
+
+                            </li>
+
+                        {% endfor %}                        
+
+                    </ul>
+
+                </div>
+
+                {% set cont_sub_menu = cont_sub_menu + 1 %}
+
+            {% endif %} 
+            
+        </li>
+    {% endfor %}
+
+    {% if more_categories %}
+        <li class="first-level sub">
+
+            <div class="first-level-name-icone">
+
+                <div class="first-level-name">
+
+                    <span role="button" title="Departamentos">
+                        <div class="name">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" style="margin-bottom: -4px;" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                            </svg> 
+                            {% if settings.menu_texto_mais_categorias|length > 0 %}
+                                {{ settings.menu_texto_mais_categorias }}
+                            {% else %}
+                                + Categorias
+                            {% endif %}
+                        </div>
+                    </span>
+    
+                </div>
+    
+                <div class="first-level-icone">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </div>
+
+            </div>
+
+            <div class="sub-list second-level">
+
+                <ul>                    
+                    {% for category in more_categories %}                            
+                    <li>                                
+                        <a href="{{ category.link }}" title="{{ category.name }}">{{ category.name }}</a>
+                    </li>
+                    
+                    {% if category.children and settings.exibir_subs_vermais %}
+                    <ul class="sub-list third-level">
+                        {% for level3 in category.children %}
+                        <li class="third-more-categories">
+                            <a href="{{ level3.link }}" title="{{ level3.name }}">{{ level3.name }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {% endfor %} 
+                </ul> 
+
+            </div>
+                               
+        </li>
+    {% endif %}
+
+    {% element 'snippets/menu-paginas-extras' {'posicao': 2, 'icones_menu': icones_menu, 'contador_menu': contador_menu} %}
+
+</ul>

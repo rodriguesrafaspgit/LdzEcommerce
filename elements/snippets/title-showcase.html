@@ -1,0 +1,18 @@
+{% set title_showcase = 'Produtos' %}
+{% set showcase = type %}
+
+{% if title|length > 0 %}
+    {% set title_showcase = title %}
+{% elseif showcase == 'top_seller' %} 
+    {% set title_showcase = 'Mais Vendidos' %}
+{% elseif showcase == 'new'  %}
+    {% set title_showcase = 'Lançamentos' %}
+{% elseif showcase == 'featured'  %}
+    {% set title_showcase = 'Destaques' %}
+{% elseif showcase == 'free_shipping'  %}
+    {% set title_showcase = 'Frete Grátis' %}
+{% elseif showcase == 'promotion'  %}
+    {% set title_showcase = 'Promoção' %}
+{% endif %}
+
+{{ title_showcase }}
